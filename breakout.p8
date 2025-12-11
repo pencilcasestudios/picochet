@@ -6,6 +6,7 @@ __lua__
 -- variables
 x=0
 y=50
+speed=1
 alive=true
 red=8
 colour="red"
@@ -20,9 +21,15 @@ end
 -- update gets called every
 -- frame
 function _update()
-	x=x+1
-	if x > 127 then
-		x=0
+	x=x+speed
+
+	-- check for the right edge
+	if x > 122 then
+		speed=-1
+	end
+	-- check for the left edge
+	if x < 0 then
+		speed=1
 	end
 end
 
