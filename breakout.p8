@@ -4,13 +4,21 @@ __lua__
 -- intro to the game loop
 
 -- variables
+-- starting position
 x=0
-y=50
-speed=1
-alive=true
-red=8
-colour="red"
-heart="♥"
+y=33
+
+-- starting speed
+xspeed=1
+yspeed=1
+
+-- colour of the heart
+red=8 -- red
+white=7 -- white
+char_colour=8
+
+-- character to draw
+char="♥"
 
 -- init is called once
 -- at the beginning of the game
@@ -21,15 +29,27 @@ end
 -- update gets called every
 -- frame
 function _update()
-	x=x+speed
+	x=x+xspeed
+	y=y+yspeed
 
 	-- check for the right edge
 	if x > 122 then
-		speed=-1
+		xspeed=-1
 	end
+
 	-- check for the left edge
 	if x < 0 then
-		speed=1
+		xspeed=1
+	end
+
+	-- check for the bottom edge
+	if y > 122 then
+		yspeed=-1
+	end
+
+	-- check for the top edge
+	if y < 0 then
+		yspeed=1
 	end
 end
 
@@ -37,7 +57,9 @@ end
 -- called every frame
 function _draw()
 	cls()
-	print(heart,x,y,red)
+	print(x, white)
+	print(y, white)
+	print(char,x,y,char_colour)
 end
 
 __gfx__

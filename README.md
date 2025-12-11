@@ -4,8 +4,8 @@ I am learning to make games using PICO-8. This repo is me following along with t
 
 0. [x] [Let's Make Breakout in PICO-8](https://youtu.be/YQzwVDMIfyU?si=IYcgMlGWlYwGDTBS)
 1. [x] [Breakout #1 - Hello World - Pico-8 Hero](https://youtu.be/-dElgcbsHdA?si=9SSL_lKDPcBNUKqc)
-2. [ ] Breakout #02 - Functions and Variables - Pico-8 Hero
-3. [ ] Breakout #03 - IF-Statements - Pico-8 Hero
+2. [x] Breakout #02 - Functions and Variables - Pico-8 Hero
+3. [x] Breakout #03 - IF-Statements - Pico-8 Hero
 4. [ ] Breakout #04 - Sound Effects - Pico-8 Hero
 5. [ ] Breakout #05 - Moving the Paddle - Pico-8 Hero
 6. [ ] Breakout #06 - Collision - Pico-8 Hero
