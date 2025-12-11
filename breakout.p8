@@ -1,65 +1,52 @@
 pico-8 cartridge // http://www.pico-8.com
 version 43
 __lua__
--- intro to the game loop
+-- breakout
+--
+-- this is a breakout clone.
+-- i am following the youtube
+-- tutorial by @lazydevs.
 
 -- variables
--- starting position
-x=0
-y=33
+ball_x=50
+ball_y=100
+ball_deltax=1
+ball_deltay=1
+ball_radius=2
+ball_colour=10 -- yellow
 
--- starting speed
-xspeed=1
-yspeed=1
+screen_top=2
+screen_bottom=125
+screen_left=2
+screen_right=125
 
--- colour of the heart
-red=8 -- red
-white=7 -- white
-char_colour=8
-
--- character to draw
-char="♥"
-
--- init is called once
--- at the beginning of the game
 function _init()
-	print("init")
+	cls()
 end
 
--- update gets called every
--- frame
 function _update()
-	x=x+xspeed
-	y=y+yspeed
+	ball_x=ball_x+ball_deltax
+	ball_y=ball_y+ball_deltay
 
-	-- check for the right edge
-	if x > 122 then
-		xspeed=-1
+	if ball_x > screen_right or
+		ball_x < screen_left then
+		ball_deltax=-ball_deltax
 	end
 
-	-- check for the left edge
-	if x < 0 then
-		xspeed=1
-	end
-
-	-- check for the bottom edge
-	if y > 122 then
-		yspeed=-1
-	end
-
-	-- check for the top edge
-	if y < 0 then
-		yspeed=1
+	if ball_y > screen_bottom or
+		ball_y < screen_top then
+		ball_deltay=-ball_deltay
 	end
 end
 
--- draw may or may not be
--- called every frame
 function _draw()
 	cls()
-	print(x, white)
-	print(y, white)
-	print(char,x,y,char_colour)
+	circfill(
+		ball_x,
+		ball_y,
+		ball_radius,
+		ball_colour
+	)
 end
 
 __gfx__
