@@ -8,6 +8,23 @@ __lua__
 -- tutorial by @lazydevs.
 
 -- variables
+
+-- colours
+black=0
+dark_blue=1
+purple=2
+gray=6
+white=7
+yellow=10
+
+-- paddle
+paddle_x=5
+paddle_y=120
+paddle_width=20
+paddle_height=3
+paddle_speed=6
+
+-- ball
 ball_x=50
 ball_y=100
 ball_deltax=1
@@ -19,17 +36,31 @@ screen_bottom=125
 screen_left=2
 screen_right=125
 
--- colours
-black=0
-dark_blue=1
-purple=2
-yellow=10
-
 function _init()
 	cls()
 end
 
 function _update()
+	-- move the pad
+	if btn(⬅️) then
+		if paddle_x > 0 then
+			paddle_x=paddle_x-paddle_speed
+		else
+			paddle_x=0
+			sfx(1)
+		end
+	end
+
+	if btn(➡️) then
+		if paddle_x < screen_right-paddle_width+2 then
+			paddle_x=paddle_x+paddle_speed
+		else
+			paddle_x=screen_right-paddle_width+2
+			sfx(1)
+		end
+	end
+
+	-- move the ball
 	ball_x=ball_x+ball_deltax
 	ball_y=ball_y+ball_deltay
 
@@ -55,6 +86,20 @@ function _draw()
 		ball_radius,
 		yellow
 	)
+	rectfill(
+		paddle_x,
+		paddle_y,
+		paddle_x+paddle_width,
+		paddle_y+paddle_height,
+		gray
+	)
+
+	-- debug paddle
+	print(paddle_x, white)
+	print(
+		paddle_x+paddle_width,
+		white
+	)
 end
 
 __gfx__
@@ -66,3 +111,4 @@ __gfx__
 00700700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 __sfx__
 000100000705007050070501005010050100500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+0001000029010200100e0100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
