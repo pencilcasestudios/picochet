@@ -13,12 +13,17 @@ ball_y=100
 ball_deltax=1
 ball_deltay=1
 ball_radius=2
-ball_colour=10 -- yellow
 
 screen_top=2
 screen_bottom=125
 screen_left=2
 screen_right=125
+
+-- colours
+black=0
+dark_blue=1
+purple=2
+yellow=10
 
 function _init()
 	cls()
@@ -43,11 +48,12 @@ end
 
 function _draw()
 	cls()
+	rectfill(0,0,127,127,purple)
 	circfill(
 		ball_x,
 		ball_y,
 		ball_radius,
-		ball_colour
+		yellow
 	)
 end
 
