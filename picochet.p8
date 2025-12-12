@@ -1,11 +1,13 @@
 pico-8 cartridge // http://www.pico-8.com
 version 43
 __lua__
--- breakout
+-- picochet
 --
 -- this is a breakout clone.
--- i am following the youtube
--- tutorial by @lazydevs.
+-- i am learning how to make
+-- games in pico-8 by following
+-- a youtube tutorial by
+-- @lazydevs.
 
 -- variables
 
