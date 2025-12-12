@@ -24,7 +24,7 @@ paddle_x=5
 paddle_y=120
 paddle_width=20
 paddle_height=3
-paddle_speed=6
+paddle_deltax=0
 
 -- ball
 ball_x=50
@@ -43,24 +43,22 @@ function _init()
 end
 
 function _update()
-	-- move the pad
+	-- move the paddle
+	button_press=false
 	if btn(⬅️) then
-		if paddle_x > 0 then
-			paddle_x=paddle_x-paddle_speed
-		else
-			paddle_x=0
-			sfx(1)
-		end
+		paddle_deltax=-5
+		button_press=true
 	end
 
 	if btn(➡️) then
-		if paddle_x < screen_right-paddle_width+2 then
-			paddle_x=paddle_x+paddle_speed
-		else
-			paddle_x=screen_right-paddle_width+2
-			sfx(1)
-		end
+		paddle_deltax=5
+		button_press=true
 	end
+
+	if not(button_press) then
+		paddle_deltax=paddle_deltax/2.25
+	end
+	paddle_x=paddle_x+paddle_deltax
 
 	-- move the ball
 	ball_x=ball_x+ball_deltax
