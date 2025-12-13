@@ -17,6 +17,7 @@ function _init()
 	gray=6
 	white=7
 	red=8
+	orange=9
 	yellow=10
 	paddle_colour=white
 
@@ -113,7 +114,7 @@ function _update()
 			paddle_height
 		) then
 		-- do something
-			paddle_colour=red
+			paddle_colour=orange
 			sfx(0)
 			ball_deltay=-ball_deltay
 	end
