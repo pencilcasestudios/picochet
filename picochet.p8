@@ -41,20 +41,50 @@ function _init()
 	screen_right=125
 end
 
+function has_ball_collided(
+		box_x,
+		box_y,
+		box_width,
+		box_height
+	)
+	-- top of ball bellow paddle
+	if ball_y-ball_radius >
+				box_y+box_height then
+		return false -- no collision
+	end
+	-- bottom of ball above paddle
+	if ball_y+ball_radius <
+				box_y then
+		return false -- no collision
+	end
+	-- left of ball right of paddle
+	if ball_x-ball_radius >
+				box_x+box_width then
+		return false -- no collision
+	end
+	-- right of ball left of paddle
+	if ball_x+ball_radius <
+				box_x then
+		return false -- no collision
+	end
+
+	return true
+end
+
 function _update()
 	-- move the paddle
-	button_press=false
+	local is_button_pressed=false
 	if btn(⬅️) then
 		paddle_deltax=-5
-		button_press=true
+		is_button_pressed=true
 	end
 
 	if btn(➡️) then
 		paddle_deltax=5
-		button_press=true
+		is_button_pressed=true
 	end
 
-	if not(button_press) then
+	if not(is_button_pressed) then
 		paddle_deltax=paddle_deltax/2
 	end
 	paddle_x=paddle_x+paddle_deltax
@@ -84,6 +114,8 @@ function _update()
 		) then
 		-- do something
 			paddle_colour=red
+			sfx(0)
+			ball_deltay=-ball_deltay
 	end
 end
 
@@ -103,43 +135,6 @@ function _draw()
 		paddle_y+paddle_height,
 		paddle_colour
 	)
-
-	-- debug paddle
-	print(paddle_x, white)
-	print(
-		paddle_x+paddle_width,
-		white
-	)
-end
-
-function has_ball_collided(
-		box_x,
-		box_y,
-		box_width,
-		box_height
-	)
-	-- top of ball bellow paddle
-	if ball_y-ball_radius >
-				box_y+box_height then
-		return false -- no collision
-	end
-	-- bottom of ball above paddle
-	if ball_y+ball_radius <
-				box_y then
-		return false -- no collision
-	end
-	-- left of ball right of paddle
-	if ball_x-ball_radius >
-				box_x+box_width then
-		return false -- no collision
-	end
-	-- right of ball left of paddle
-	if ball_x+ball_radius <
-				box_x then
-		return false -- no collision
-	end
-
-	return true
 end
 
 __gfx__
