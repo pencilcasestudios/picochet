@@ -10,7 +10,7 @@ I am learning to make games using PICO-8. This repo is me following along with a
 05. [x] [Breakout #05 - Moving the Paddle - Pico-8 Hero]()
 06. [x] [Breakout #06 - Collision - Pico-8 Hero]()
 07. [x] [Breakout #07 - More Collision - Pico-8 Hero]()
-08. [ ] [Breakout #08 - Final Collision - Pico-8 Hero]()
+08. [ ] [Breakout #08 - Final Collision - Pico-8 Hero](https://youtu.be/fBi6vPcFmJ4?si=VsiZHfmB6HCPWPsP)
 09. [ ] [Breakout #09 - Game States - Pico-8 Hero]()
 10. [ ] [Breakout #10 - Bricks - Pico-8 Hero]()
 11. [ ] [Breakout #11 - Brick Lines - Pico-8 Hero]()
