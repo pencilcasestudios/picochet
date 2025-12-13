@@ -17,7 +17,9 @@ dark_blue=1
 purple=2
 gray=6
 white=7
+red=8
 yellow=10
+paddle_colour=white
 
 -- paddle
 paddle_x=5
@@ -56,7 +58,7 @@ function _update()
 	end
 
 	if not(button_press) then
-		paddle_deltax=paddle_deltax/2.25
+		paddle_deltax=paddle_deltax/2
 	end
 	paddle_x=paddle_x+paddle_deltax
 
@@ -75,6 +77,17 @@ function _update()
 		ball_deltay=-ball_deltay
 		sfx(0)
 	end
+
+	paddle_colour=white
+	if has_ball_collided(
+			paddle_x,
+			paddle_y,
+			paddle_width,
+			paddle_height
+		) then
+		-- do something
+			paddle_colour=red
+	end
 end
 
 function _draw()
@@ -91,7 +104,7 @@ function _draw()
 		paddle_y,
 		paddle_x+paddle_width,
 		paddle_y+paddle_height,
-		gray
+		paddle_colour
 	)
 
 	-- debug paddle
@@ -100,6 +113,36 @@ function _draw()
 		paddle_x+paddle_width,
 		white
 	)
+end
+
+function has_ball_collided(
+		box_x,
+		box_y,
+		box_width,
+		box_height
+	)
+	-- top of ball bellow paddle
+	if ball_y-ball_radius >
+				box_y+box_height then
+		return false -- no collision
+	end
+	-- bottom of ball above paddle
+	if ball_y+ball_radius <
+				box_y then
+		return false -- no collision
+	end
+	-- left of ball right of paddle
+	if ball_x-ball_radius >
+				box_x+box_width then
+		return false -- no collision
+	end
+	-- right of ball left of paddle
+	if ball_x+ball_radius <
+				box_x then
+		return false -- no collision
+	end
+
+	return true
 end
 
 __gfx__
