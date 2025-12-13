@@ -9,39 +9,36 @@ __lua__
 -- a youtube tutorial by
 -- @lazydevs.
 
--- variables
-
--- colours
-black=0
-dark_blue=1
-purple=2
-gray=6
-white=7
-red=8
-yellow=10
-paddle_colour=white
-
--- paddle
-paddle_x=5
-paddle_y=120
-paddle_width=20
-paddle_height=3
-paddle_deltax=0
-
--- ball
-ball_x=50
-ball_y=100
-ball_deltax=1
-ball_deltay=1
-ball_radius=2
-
-screen_top=2
-screen_bottom=125
-screen_left=2
-screen_right=125
-
 function _init()
-	cls()
+	-- colours
+	black=0
+	dark_blue=1
+	purple=2
+	gray=6
+	white=7
+	red=8
+	yellow=10
+	paddle_colour=white
+
+	-- paddle
+	paddle_x=5
+	paddle_y=120
+	paddle_width=20
+	paddle_height=3
+	paddle_deltax=0
+
+	-- ball
+	ball_x=50
+	ball_y=100
+	ball_deltax=1
+	ball_deltay=1
+	ball_radius=2
+
+	-- screen
+	screen_top=2
+	screen_bottom=125
+	screen_left=2
+	screen_right=125
 end
 
 function _update()
