@@ -72,6 +72,91 @@ function has_ball_collided(
 	return true
 end
 
+-- return "true" if the ball
+-- needs to deflect
+-- horizontally
+-- return "false" if the ball
+-- needs to deflect vertically
+function is_horizontal_deflect(
+		bx,by,bdx,bdy,tx,ty,tw,th
+	)
+	-- calculate wether to deflect
+	-- horizontally or vertically
+	-- when the ball hits a box
+
+	-- trivial case
+	if bdx == 0 then
+		-- ball is moving vertically
+		return false
+	-- trivial case
+	elseif bdy == 0 then
+		-- ball is moving horizontally
+		return true
+	-- elaborate cases
+	else
+		-- ball is moving diagonally
+		-- calculate slope
+		-- "rise over run"
+		local slope = bdy / bdx
+		local cx -- corner x
+		local cy -- corner y
+
+		-- check variants
+		if slope > 0 and bdx > 0 then
+			-- ball is moving down and
+			-- to the right
+			cx = tx-bx
+			cy = ty-by
+			if cx <= 0 then
+				return false
+			elseif cy/cx < slope then
+				return true
+			else
+				return false
+			end
+		elseif slope < 0 and
+									bdx > 0 then
+			-- ball is moving up and to
+			-- the right
+			cx = tx-bx
+			cy = ty+th-by
+			if cx <= 0 then
+				return false
+			elseif cy/cx < slope then
+				return false
+			else
+				return true
+			end
+		elseif slope > 0 and
+									bdx < 0 then
+			-- ball is moving up and to
+			-- the left
+			cx = tx+tw-bx
+			cy = tw+th-by
+			if cx >= 0 then
+				return false
+			elseif cy/cx > slope then
+				return false
+			else
+				return true
+			end
+		else
+			-- ball is moving down and
+			-- to the left
+			cx = tx+tw-bx
+			cy = ty-by
+			if cx >= 0 then
+				return false
+			elseif cy/cx < slope then
+				return false
+			else
+				return true
+			end
+		end
+	end
+	return false
+end
+
 function _update()
 	-- move the paddle
 	local is_button_pressed=false
@@ -115,7 +200,7 @@ function _update()
 		) then
 		-- do something
 			paddle_colour=orange
-			sfx(0)
+			sfx(2)
 			ball_deltay=-ball_deltay
 	end
 end
@@ -148,3 +233,4 @@ __gfx__
 __sfx__
 000100000705007050070501005010050100500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0001000029010200100e0100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+000100001305013050130501c0501c0501c0500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
