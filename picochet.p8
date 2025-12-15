@@ -159,7 +159,7 @@ function is_horizontal_deflect(
 	return false
 end
 
-function _update()
+function _update60()
 	-- has a button been pressed?
 	local is_button_pressed=false
 
@@ -171,17 +171,18 @@ function _update()
 	-- move the paddle if left or
 	-- right is pressed
 	if btn(⬅️) then
-		paddle_deltax=-5
+		paddle_deltax=-2.5
 		is_button_pressed=true
 	end
 
 	if btn(➡️) then
-		paddle_deltax=5
+		paddle_deltax=2.5
 		is_button_pressed=true
 	end
 
 	if not(is_button_pressed) then
-		paddle_deltax=paddle_deltax/2
+		paddle_deltax=
+			paddle_deltax/1.5
 	end
 	paddle_x=paddle_x+paddle_deltax
 
