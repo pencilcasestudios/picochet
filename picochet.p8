@@ -36,35 +36,37 @@ function _init()
 	ball_radius=2
 
 	-- screen
-	screen_top=2
-	screen_bottom=125
-	screen_left=2
-	screen_right=125
+	screen_top=0
+	screen_bottom=127
+	screen_left=0
+	screen_right=127
 end
 
 function has_ball_collided(
+		bx,
+		by,
 		box_x,
 		box_y,
 		box_width,
 		box_height
 	)
 	-- top of ball bellow paddle
-	if ball_y-ball_radius >
+	if by-ball_radius >
 				box_y+box_height then
 		return false -- no collision
 	end
 	-- bottom of ball above paddle
-	if ball_y+ball_radius <
+	if by+ball_radius <
 				box_y then
 		return false -- no collision
 	end
 	-- left of ball right of paddle
-	if ball_x-ball_radius >
+	if bx-ball_radius >
 				box_x+box_width then
 		return false -- no collision
 	end
 	-- right of ball left of paddle
-	if ball_x+ball_radius <
+	if bx+ball_radius <
 				box_x then
 		return false -- no collision
 	end
@@ -158,8 +160,16 @@ function is_horizontal_deflect(
 end
 
 function _update()
-	-- move the paddle
+	-- has a button been pressed?
 	local is_button_pressed=false
+
+	-- what is the next position
+	-- of the ball?
+	local nextx
+	local nexty
+
+	-- move the paddle if left or
+	-- right is pressed
 	if btn(⬅️) then
 		paddle_deltax=-5
 		is_button_pressed=true
@@ -175,34 +185,48 @@ function _update()
 	end
 	paddle_x=paddle_x+paddle_deltax
 
-	-- move the ball
-	ball_x=ball_x+ball_deltax
-	ball_y=ball_y+ball_deltay
+	nextx=ball_x+ball_deltax
+	nexty=ball_y+ball_deltay
 
-	if ball_x > screen_right or
-		ball_x < screen_left then
+	-- move the ball
+	if nextx > screen_right or
+		nextx < screen_left then
+		nextx=mid(
+									screen_left,
+									nextx,
+									screen_right
+								)
 		ball_deltax=-ball_deltax
 		sfx(0)
 	end
 
-	if ball_y > screen_bottom or
-		ball_y < screen_top then
+	if nexty > screen_bottom or
+		nexty < screen_top then
+		nexty=mid(
+									screen_bottom,
+									nexty,
+									screen_top
+								)
 		ball_deltay=-ball_deltay
 		sfx(0)
 	end
 
 	paddle_colour=white
 	if has_ball_collided(
+			nextx,
+			nexty,
 			paddle_x,
 			paddle_y,
 			paddle_width,
 			paddle_height
 		) then
-		-- do something
 			paddle_colour=orange
 			sfx(2)
 			ball_deltay=-ball_deltay
 	end
+
+	ball_x=nextx
+	ball_y=nexty
 end
 
 function _draw()
