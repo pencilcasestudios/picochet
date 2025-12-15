@@ -57,7 +57,7 @@ function play_game()
 	status_bar_height=10
 
 	-- player stats
-	lives=3
+	lives=2
 
 	serve_ball()
 end
