@@ -15,7 +15,7 @@ function _init()
 	game_developer="pencil case studios"
 	game_mode="start game"
 
-	-- colours
+	-- game colours
 	black=0
 	dark_blue=1
 	purple=2
@@ -25,6 +25,12 @@ function _init()
 	orange=9
 	yellow=10
 	paddle_colour=white
+
+	-- game sounds
+	wall_bounce_sound=0
+	start_sound=1
+	paddle_bounce_sound=2
+	out_of_bounds_sound=3
 end
 
 function play_game()
@@ -36,10 +42,6 @@ function play_game()
 	paddle_deltax=0
 
 	-- ball
-	ball_x=50
-	ball_y=100
-	ball_deltax=1
-	ball_deltay=1
 	ball_radius=2
 
 	-- ball bounce area
@@ -56,6 +58,18 @@ function play_game()
 
 	-- player stats
 	lives=3
+
+	serve_ball()
+end
+
+function serve_ball()
+	-- ball
+	ball_x=50
+	ball_y=screen_top
+	ball_deltax=1
+	ball_deltay=1
+
+	sfx(start_sound)
 end
 
 function has_ball_collided(
@@ -182,7 +196,11 @@ function draw_start_game()
 		.. game_version, white
 	)
 	print(game_developer, white)
-	print("press ❎ to start",0,50,yellow)
+	print("press ❎ to start",
+		0,
+		50,
+		yellow
+	)
 end
 
 function draw_play_game()
@@ -236,6 +254,7 @@ end
 function update_start_game()
 	if btn(❎) then
 		-- update the game mode
+		sfx(start_sound)
 		game_mode="play game"
 
 		-- play the game
@@ -273,7 +292,9 @@ function update_play_game()
 	nextx=ball_x+ball_deltax
 	nexty=ball_y+ball_deltay
 
-	-- move the ball
+	-- bounce the ball off the left
+	-- and right walls of the play
+	-- area
 	if nextx > screen_right or
 		nextx < screen_left then
 		nextx=mid(
@@ -282,20 +303,22 @@ function update_play_game()
 									screen_right
 								)
 		ball_deltax=-ball_deltax
-		sfx(0)
+		sfx(wall_bounce_sound)
 	end
 
-	if nexty > screen_bottom or
-		nexty < screen_top then
+	-- bounce the ball off the top
+	-- of the play area
+	if nexty < screen_top then
 		nexty=mid(
 									screen_bottom,
 									nexty,
 									screen_top
 								)
 		ball_deltay=-ball_deltay
-		sfx(0)
+		sfx(wall_bounce_sound)
 	end
 
+	-- set the paddle colour
 	paddle_colour=white
 	if has_ball_collided(
 			nextx,
@@ -328,12 +351,24 @@ function update_play_game()
 				-- direction
 				ball_deltay=-ball_deltay
 			end
+			-- update the paddle colour
+			-- on collision
 			paddle_colour=orange
-			sfx(2)
+			sfx(paddle_bounce_sound)
 	end
 
 	ball_x=nextx
 	ball_y=nexty
+
+	-- if the ball hits the bottom
+	-- of the screen, the player
+	-- loses a life and we serve
+	-- the ball
+	if nexty > screen_bottom then
+		lives=lives-1
+		sfx(out_of_bounds_sound)
+		serve_ball()
+	end
 end
 
 function update_game_over()
@@ -375,5 +410,6 @@ __gfx__
 00700700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 __sfx__
 000100000705007050070501005010050100500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-0001000029010200100e0100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+001000001f0502b0502b0300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 000100001305013050130501c0501c0501c0500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00050000264201f42018420134200d420094200542003420024200042000420004200042000420004200042000000000000000000000000000000000000000000000000000000000000000000000000000000000
