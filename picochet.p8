@@ -220,9 +220,31 @@ function _update()
 			paddle_width,
 			paddle_height
 		) then
+			-- handle collision by
+			-- finding out the
+			-- trajectory of the ball so
+			-- that we can appropriately
+			-- deflect it
+			if is_horizontal_deflect(
+						 ball_x,
+							ball_y,
+							ball_deltax,
+							ball_deltay,
+							paddle_x,
+							paddle_y,
+							paddle_width,
+							paddle_height
+						) then
+				-- deflect in the x
+				-- direction
+				ball_deltax=-ball_deltax
+			else
+				-- deflect in the y
+				-- direction
+				ball_deltay=-ball_deltay
+			end
 			paddle_colour=orange
 			sfx(2)
-			ball_deltay=-ball_deltay
 	end
 
 	ball_x=nextx
