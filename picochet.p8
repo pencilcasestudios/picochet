@@ -177,8 +177,7 @@ function draw_start_game()
 end
 
 function draw_play_game()
-	cls()
-	rectfill(0,0,127,127,purple)
+	cls(purple)
 	circfill(
 		ball_x,
 		ball_y,
