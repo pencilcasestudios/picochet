@@ -189,6 +189,10 @@ function is_horizontal_deflect(
 	return false
 end
 
+function game_over()
+	game_mode="game over"
+end
+
 function draw_start_game()
 	cls()
 	print("picochet", yellow)
@@ -243,8 +247,12 @@ function draw_play_game()
 end
 
 function draw_game_over()
-	cls()
-	print("game over")
+	print(
+		"game over",
+		45,
+		50,
+		white
+	)
 end
 
 function draw_pause_game()
@@ -366,8 +374,12 @@ function update_play_game()
 	-- the ball
 	if nexty > screen_bottom then
 		lives=lives-1
-		sfx(out_of_bounds_sound)
-		serve_ball()
+		if lives < 0 then
+			game_over()
+		else
+			sfx(out_of_bounds_sound)
+			serve_ball()
+		end
 	end
 end
 
