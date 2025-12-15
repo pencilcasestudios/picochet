@@ -42,11 +42,20 @@ function play_game()
 	ball_deltay=1
 	ball_radius=2
 
-	-- screen
-	screen_top=0
-	screen_bottom=127
+	-- ball bounce area
+	screen_top=10
+	screen_bottom=128
 	screen_left=0
-	screen_right=127
+	screen_right=128
+
+	-- status bar
+	status_bar_x=0
+	status_bar_y=0
+	status_bar_width=128
+	status_bar_height=10
+
+	-- player stats
+	lives=3
 end
 
 function has_ball_collided(
@@ -177,19 +186,41 @@ function draw_start_game()
 end
 
 function draw_play_game()
+	-- set the background
 	cls(purple)
+
+	-- draw the ball
 	circfill(
 		ball_x,
 		ball_y,
 		ball_radius,
 		yellow
 	)
+
+	-- draw the paddle
 	rectfill(
 		paddle_x,
 		paddle_y,
 		paddle_x+paddle_width,
 		paddle_y+paddle_height,
 		paddle_colour
+	)
+
+	-- draw the status bar
+	rectfill(
+		status_bar_x,
+		status_bar_y,
+		status_bar_x+status_bar_width,
+		status_bar_y+status_bar_height,
+		black
+	)
+
+	-- draw player stats
+	print(
+		"lives: ".. lives,
+		1,
+		2,
+		white
 	)
 end
 
@@ -331,7 +362,7 @@ function _draw()
 	elseif game_mode=="game over" then
 		draw_game_over()
 	elseif game_mode=="pause game" then
-		draw_pause_gam()
+		draw_pause_game()
 	end
 end
 
