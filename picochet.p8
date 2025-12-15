@@ -43,15 +43,15 @@ function play_game()
 	ball_radius=2
 
 	-- ball bounce area
-	screen_top=10
-	screen_bottom=128
-	screen_left=0
-	screen_right=128
+	screen_top=13
+	screen_bottom=125
+	screen_left=2
+	screen_right=125
 
 	-- status bar
 	status_bar_x=0
 	status_bar_y=0
-	status_bar_width=128
+	status_bar_width=127
 	status_bar_height=10
 
 	-- player stats
