@@ -10,6 +10,11 @@ __lua__
 -- @lazydevs.
 
 function _init()
+	-- game
+	game_version="0.0.1"
+	game_developer="pencil case studios"
+	game_mode="start game"
+
 	-- colours
 	black=0
 	dark_blue=1
@@ -20,7 +25,9 @@ function _init()
 	orange=9
 	yellow=10
 	paddle_colour=white
+end
 
+function play_game()
 	-- paddle
 	paddle_x=5
 	paddle_y=120
@@ -159,7 +166,54 @@ function is_horizontal_deflect(
 	return false
 end
 
-function _update60()
+function draw_start_game()
+	cls()
+	print("picochet", yellow)
+	print("version "
+		.. game_version, white
+	)
+	print(game_developer, white)
+	print("press ❎ to start",0,50,yellow)
+end
+
+function draw_play_game()
+	cls()
+	rectfill(0,0,127,127,purple)
+	circfill(
+		ball_x,
+		ball_y,
+		ball_radius,
+		yellow
+	)
+	rectfill(
+		paddle_x,
+		paddle_y,
+		paddle_x+paddle_width,
+		paddle_y+paddle_height,
+		paddle_colour
+	)
+end
+
+function draw_game_over()
+	cls()
+	print("game over")
+end
+
+function draw_pause_game()
+	print("paused")
+end
+
+function update_start_game()
+	if btn(❎) then
+		-- update the game mode
+		game_mode="play game"
+
+		-- play the game
+		play_game()
+	end
+end
+
+function update_play_game()
 	-- has a button been pressed?
 	local is_button_pressed=false
 
@@ -252,22 +306,34 @@ function _update60()
 	ball_y=nexty
 end
 
+function update_game_over()
+end
+
+function update_pause_game()
+end
+
+function _update60()
+	if game_mode=="start game" then
+		update_start_game()
+	elseif game_mode=="play game" then
+		update_play_game()
+	elseif game_mode=="game over" then
+		update_game_over()
+	elseif game_mode=="pause game" then
+		update_pause_game()
+	end
+end
+
 function _draw()
-	cls()
-	rectfill(0,0,127,127,purple)
-	circfill(
-		ball_x,
-		ball_y,
-		ball_radius,
-		yellow
-	)
-	rectfill(
-		paddle_x,
-		paddle_y,
-		paddle_x+paddle_width,
-		paddle_y+paddle_height,
-		paddle_colour
-	)
+	if game_mode=="start game" then
+		draw_start_game()
+	elseif game_mode=="play game" then
+		draw_play_game()
+	elseif game_mode=="game over" then
+		draw_game_over()
+	elseif game_mode=="pause game" then
+		draw_pause_gam()
+	end
 end
 
 __gfx__
