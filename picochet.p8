@@ -249,9 +249,15 @@ end
 function draw_game_over()
 	print(
 		"game over",
-		45,
+		8,
 		50,
 		white
+	)
+	print(
+		"press ❎ to restart",
+		8,
+		60,
+		gray
 	)
 end
 
