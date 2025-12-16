@@ -390,6 +390,15 @@ function update_play_game()
 end
 
 function update_game_over()
+	if btn(❎) then
+		-- update the game mode
+		sfx(start_sound)
+		game_mode="play game"
+
+		-- play the game
+		play_game()
+	end
+
 end
 
 function update_pause_game()
