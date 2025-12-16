@@ -19,18 +19,18 @@ function _init()
 	black=0
 	dark_blue=1
 	purple=2
-	-- colour=3
+	-- unnamed colour=3
 	brown=4
-	-- colour=5
+	-- unnamed colour=5
 	gray=6
 	white=7
 	red=8
 	orange=9
 	yellow=10
-	-- colour=11
-	-- colour=12
-	-- colour=13
-	-- colour=14
+	-- unnamed colour=11
+	-- unnamed colour=12
+	-- unnamed colour=13
+	-- unnamed colour=14
 	sand=15
 
 	paddle_colour=white
@@ -70,14 +70,30 @@ function play_game()
 	-- player stats
 	lives=2
 
-	-- brick
-	brick_x=50
-	brick_y=50
+	-- bricks
 	brick_width=16
 	brick_height=6
-	brick_visible=true
+
+	build_bricks()
 
 	serve_ball()
+end
+
+function build_bricks()
+	brick_x={}
+	brick_y={}
+	is_brick_visible={}
+
+	local i
+	for i=1,6 do
+		add(
+			brick_x,(
+				5+(i-1)*(brick_width+2)
+			)
+		)
+		add(brick_y,50)
+		add(is_brick_visible,true)
+	end
 end
 
 function serve_ball()
@@ -246,15 +262,18 @@ function draw_play_game()
 		white
 	)
 
-	if brick_visible then
-		-- draw brick
-		rectfill(
-			brick_x,
-			brick_y,
-			brick_x+brick_width,
-			brick_y+brick_height,
-			sand
-		)
+	-- draw bricks
+	local i
+	for i=1,#brick_x do
+		if is_brick_visible[i] do
+			rectfill(
+				brick_x[i],
+				brick_y[i],
+				brick_x[i]+brick_width,
+				brick_y[i]+brick_height,
+				sand
+			)
+		end
 	end
 
 	-- draw ball
@@ -370,40 +389,42 @@ function update_play_game()
 
 	-- check if the ball hits a
 	-- brick
-	if brick_visible and
-		has_ball_collided(
-			nextx,
-			nexty,
-			brick_x,
-			brick_y,
-			brick_width,
-			brick_height
-		) then
+	for i=1,#brick_x do
+		if is_brick_visible[i] and
+			has_ball_collided(
+				nextx,
+				nexty,
+				brick_x[i],
+				brick_y[i],
+				brick_width,
+				brick_height
+			) then
 			-- handle collision by
 			-- finding out the
 			-- trajectory of the ball so
 			-- that we can appropriately
 			-- deflect it
-		if is_horizontal_deflect(
-						ball_x,
-						ball_y,
-						ball_deltax,
-						ball_deltay,
-						brick_x,
-						brick_y,
-						brick_width,
-						brick_height
-					) then
-			-- deflect in the x
-			-- direction
-			ball_deltax=-ball_deltax
-		else
-			-- deflect in the y
-			-- direction
-			ball_deltay=-ball_deltay
+			if is_horizontal_deflect(
+							ball_x,
+							ball_y,
+							ball_deltax,
+							ball_deltay,
+							brick_x[i],
+							brick_y[i],
+							brick_width,
+							brick_height
+						) then
+				-- deflect in the x
+				-- direction
+				ball_deltax=-ball_deltax
+			else
+				-- deflect in the y
+				-- direction
+				ball_deltay=-ball_deltay
+			end
+			is_brick_visible[i]=false
+			sfx(brick_impact_sound)
 		end
-		brick_visible=false
-		sfx(brick_impact_sound)
 	end
 
 	-- check if the ball hits the
