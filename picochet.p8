@@ -19,11 +19,20 @@ function _init()
 	black=0
 	dark_blue=1
 	purple=2
+	-- colour=3
+	brown=4
+	-- colour=5
 	gray=6
 	white=7
 	red=8
 	orange=9
 	yellow=10
+	-- colour=11
+	-- colour=12
+	-- colour=13
+	-- colour=14
+	sand=15
+
 	paddle_colour=white
 
 	-- game sounds
@@ -31,6 +40,7 @@ function _init()
 	start_sound=1
 	paddle_bounce_sound=2
 	out_of_bounds_sound=3
+	brick_impact_sound=4
 end
 
 function play_game()
@@ -59,6 +69,13 @@ function play_game()
 
 	-- player stats
 	lives=2
+
+	-- brick
+	brick_x=50
+	brick_y=50
+	brick_width=16
+	brick_height=6
+	brick_visible=true
 
 	serve_ball()
 end
@@ -212,23 +229,6 @@ function draw_play_game()
 	-- set the background
 	cls(purple)
 
-	-- draw the ball
-	circfill(
-		ball_x,
-		ball_y,
-		ball_radius,
-		yellow
-	)
-
-	-- draw the paddle
-	rectfill(
-		paddle_x,
-		paddle_y,
-		paddle_x+paddle_width,
-		paddle_y+paddle_height,
-		paddle_colour
-	)
-
 	-- draw the status bar
 	rectfill(
 		status_bar_x,
@@ -244,6 +244,34 @@ function draw_play_game()
 		1,
 		2,
 		white
+	)
+
+	if brick_visible then
+		-- draw brick
+		rectfill(
+			brick_x,
+			brick_y,
+			brick_x+brick_width,
+			brick_y+brick_height,
+			sand
+		)
+	end
+
+	-- draw ball
+	circfill(
+		ball_x,
+		ball_y,
+		ball_radius,
+		yellow
+	)
+
+	-- draw paddle
+	rectfill(
+		paddle_x,
+		paddle_y,
+		paddle_x+paddle_width,
+		paddle_y+paddle_height,
+		paddle_colour
 	)
 end
 
@@ -340,8 +368,46 @@ function update_play_game()
 		sfx(wall_bounce_sound)
 	end
 
-	-- set the paddle colour
-	paddle_colour=white
+	-- check if the ball hits a
+	-- brick
+	if brick_visible and
+		has_ball_collided(
+			nextx,
+			nexty,
+			brick_x,
+			brick_y,
+			brick_width,
+			brick_height
+		) then
+			-- handle collision by
+			-- finding out the
+			-- trajectory of the ball so
+			-- that we can appropriately
+			-- deflect it
+		if is_horizontal_deflect(
+						ball_x,
+						ball_y,
+						ball_deltax,
+						ball_deltay,
+						brick_x,
+						brick_y,
+						brick_width,
+						brick_height
+					) then
+			-- deflect in the x
+			-- direction
+			ball_deltax=-ball_deltax
+		else
+			-- deflect in the y
+			-- direction
+			ball_deltay=-ball_deltay
+		end
+		brick_visible=false
+		sfx(brick_impact_sound)
+	end
+
+	-- check if the ball hits the
+	-- paddle
 	if has_ball_collided(
 			nextx,
 			nexty,
@@ -381,6 +447,9 @@ function update_play_game()
 
 	ball_x=nextx
 	ball_y=nexty
+
+	-- set the paddle colour
+	paddle_colour=white
 
 	-- if the ball hits the bottom
 	-- of the screen, the player
@@ -448,3 +517,4 @@ __sfx__
 001000001f0502b0502b0300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 000100001305013050130501c0501c0501c0500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00050000264201f42018420134200d420094200542003420024200042000420004200042000420004200042000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00060000000001e650076201661007610126100361000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
