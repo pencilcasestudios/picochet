@@ -4,10 +4,12 @@ __lua__
 -- picochet
 --
 -- this is a breakout clone.
+--
 -- i am learning how to make
 -- games in pico-8 by following
 -- a youtube tutorial by
--- @lazydevs.
+-- @lazydevs
+-- (aka @teamworkcast)
 
 function _init()
 	-- game
