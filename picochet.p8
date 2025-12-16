@@ -35,7 +35,7 @@ end
 
 function play_game()
 	-- paddle
-	paddle_x=5
+	paddle_x=54
 	paddle_y=120
 	paddle_width=20
 	paddle_height=3
