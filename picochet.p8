@@ -47,6 +47,7 @@ function play_game()
 	-- ball bounce area
 	screen_top=13
 	screen_bottom=125
+	screen_max_x=127
 	screen_left=2
 	screen_right=125
 
@@ -302,7 +303,14 @@ function update_play_game()
 			paddle_deltax/1.5
 	end
 	paddle_x=paddle_x+paddle_deltax
-
+	-- stop the paddle from moving
+	-- outside the bounds of the
+	-- game play area
+	paddle_x=mid(
+		0,
+		paddle_x,
+		screen_max_x-paddle_width
+	)
 	nextx=ball_x+ball_deltax
 	nexty=ball_y+ball_deltay
 
