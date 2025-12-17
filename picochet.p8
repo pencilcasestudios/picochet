@@ -298,7 +298,7 @@ end
 
 function draw_game_over()
 	print(
-		"you lose",
+		"you lose?",
 		8,
 		50,
 		white
@@ -313,7 +313,7 @@ end
 
 function draw_game_win()
 	print(
-		"you win!",
+		"you win?",
 		8,
 		50,
 		white
