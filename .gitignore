@@ -1,0 +1,9 @@
+# macOS
+.DS_Store
+
+# Archives
+*.zip
+
+# PICO-8
+# Optional: Ignore binary cartridges if you prefer text-based .p8 files
+# *.p8.png
