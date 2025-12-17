@@ -13,68 +13,69 @@ __lua__
 
 function _init()
 	-- game
-	game_version="0.0.1"
-	game_developer="pencil case studios"
-	game_mode="start game"
+	game_version = "0.0.1"
+	game_developer = "pencil case studios"
+	game_mode = "start game"
 
 	-- game colours
-	black=0
-	dark_blue=1
-	purple=2
+	black = 0
+	dark_blue = 1
+	purple = 2
 	-- unnamed colour=3
-	brown=4
+	brown = 4
 	-- unnamed colour=5
-	gray=6
-	white=7
-	red=8
-	orange=9
-	yellow=10
+	gray = 6
+	white = 7
+	red = 8
+	orange = 9
+	yellow = 10
 	-- unnamed colour=11
 	-- unnamed colour=12
 	-- unnamed colour=13
 	-- unnamed colour=14
-	sand=15
+	sand = 15
 
-	paddle_colour=white
+	paddle_colour = white
 
 	-- game sounds
-	wall_bounce_sound=0
-	start_sound=1
-	paddle_bounce_sound=2
-	out_of_bounds_sound=3
-	brick_impact_sound=4
+	wall_bounce_sound = 0
+	start_sound = 1
+	paddle_bounce_sound = 2
+	out_of_bounds_sound = 3
+	brick_impact_sound = 4
+	win_sound = 5
 end
 
 function play_game()
 	-- paddle
-	paddle_x=54
-	paddle_y=120
-	paddle_width=20
-	paddle_height=3
-	paddle_deltax=0
+	paddle_x = 54
+	paddle_y = 120
+	paddle_width = 20
+	paddle_height = 3
+	paddle_deltax = 0
 
 	-- ball
-	ball_radius=2
+	ball_radius = 2
 
 	-- ball bounce area
-	screen_top=13
-	screen_bottom=125
-	screen_max_x=127
-	screen_left=2
-	screen_right=125
+	screen_top = 13
+	screen_bottom = 125
+	screen_max_x = 127
+	screen_left = 2
+	screen_right = 125
 
 	-- status bar
-	status_bar_x=0
-	status_bar_y=0
-	status_bar_width=127
-	status_bar_height=10
+	status_bar_x = 0
+	status_bar_y = 0
+	status_bar_width = 127
+	status_bar_height = 10
 
 	-- player stats
-	lives=2
+	lives = 2
 
 	-- bricks
-	brick_width=16
-	brick_height=6
+	brick_width = 16
+	brick_height = 6
 
 	build_bricks()
 
@@ -82,61 +83,53 @@ function play_game()
 end
 
 function build_bricks()
-	brick_x={}
-	brick_y={}
-	is_brick_visible={}
+	brick_x = {}
+	brick_y = {}
+	is_brick_visible = {}
 
 	local i
-	for i=1,35 do
+	for i = 1, 70 do
 		add(
-			brick_x,(
-				2+((i-1)%7)*(brick_width+2)
-			)
+			brick_x,
+			(2 + ((i - 1) % 7) * (brick_width + 2))
 		)
 		add(
 			brick_y,
-			20+flr((i-1)/7)*(brick_height+2)
+			20 + flr((i - 1) / 7) * (brick_height + 2)
 		)
-		add(is_brick_visible,true)
+		add(is_brick_visible, true)
 	end
 end
 
 function serve_ball()
 	-- ball
-	ball_x=50
-	ball_y=screen_top
-	ball_deltax=1
-	ball_deltay=1
+	ball_x = 50
+	ball_y = screen_top
+	ball_deltax = 1
+	ball_deltay = 1
 
 	sfx(start_sound)
 end
 
-function has_ball_collided(
-		bx,
-		by,
-		box_x,
-		box_y,
-		box_width,
-		box_height
-	)
+function has_ball_collided(bx, by, box_x, box_y, box_width, box_height)
 	-- top of ball bellow paddle
-	if by-ball_radius >
-				box_y+box_height then
+	if by - ball_radius
+			> box_y + box_height then
 		return false -- no collision
 	end
 	-- bottom of ball above paddle
-	if by+ball_radius <
-				box_y then
+	if by + ball_radius
+			< box_y then
 		return false -- no collision
 	end
 	-- left of ball right of paddle
-	if bx-ball_radius >
-				box_x+box_width then
+	if bx - ball_radius
+			> box_x + box_width then
 		return false -- no collision
 	end
 	-- right of ball left of paddle
-	if bx+ball_radius <
-				box_x then
+	if bx + ball_radius
+			< box_x then
 		return false -- no collision
 	end
 
@@ -148,9 +141,7 @@ end
 -- horizontally
 -- return "false" if the ball
 -- needs to deflect vertically
-function is_horizontal_deflect(
-		bx,by,bdx,bdy,tx,ty,tw,th
-	)
+function is_horizontal_deflect(bx, by, bdx, bdy, tx, ty, tw, th)
 	-- calculate wether to deflect
 	-- horizontally or vertically
 	-- when the ball hits a box
@@ -159,11 +150,11 @@ function is_horizontal_deflect(
 	if bdx == 0 then
 		-- ball is moving vertically
 		return false
-	-- trivial case
+		-- trivial case
 	elseif bdy == 0 then
 		-- ball is moving horizontally
 		return true
-	-- elaborate cases
+		-- elaborate cases
 	else
 		-- ball is moving diagonally
 		-- calculate slope
@@ -176,37 +167,37 @@ function is_horizontal_deflect(
 		if slope > 0 and bdx > 0 then
 			-- ball is moving down and
 			-- to the right
-			cx = tx-bx
-			cy = ty-by
+			cx = tx - bx
+			cy = ty - by
 			if cx <= 0 then
 				return false
-			elseif cy/cx < slope then
+			elseif cy / cx < slope then
 				return true
 			else
 				return false
 			end
-		elseif slope < 0 and
-									bdx > 0 then
+		elseif slope < 0
+				and bdx > 0 then
 			-- ball is moving up and to
 			-- the right
-			cx = tx-bx
-			cy = ty+th-by
+			cx = tx - bx
+			cy = ty + th - by
 			if cx <= 0 then
 				return false
-			elseif cy/cx < slope then
+			elseif cy / cx < slope then
 				return false
 			else
 				return true
 			end
-		elseif slope > 0 and
-									bdx < 0 then
+		elseif slope > 0
+				and bdx < 0 then
 			-- ball is moving up and to
 			-- the left
-			cx = tx+tw-bx
-			cy = tw+th-by
+			cx = tx + tw - bx
+			cy = tw + th - by
 			if cx >= 0 then
 				return false
-			elseif cy/cx > slope then
+			elseif cy / cx > slope then
 				return false
 			else
 				return true
@@ -214,11 +205,11 @@ function is_horizontal_deflect(
 		else
 			-- ball is moving down and
 			-- to the left
-			cx = tx+tw-bx
-			cy = ty-by
+			cx = tx + tw - bx
+			cy = ty - by
 			if cx >= 0 then
 				return false
-			elseif cy/cx < slope then
+			elseif cy / cx < slope then
 				return false
 			else
 				return true
@@ -229,17 +220,23 @@ function is_horizontal_deflect(
 end
 
 function game_over()
-	game_mode="game over"
+	game_mode = "game over"
+end
+
+function game_win()
+	game_mode = "game win"
 end
 
 function draw_start_game()
 	cls()
 	print("picochet", yellow)
-	print("version "
-		.. game_version, white
+	print(
+		"version "
+				.. game_version, white
 	)
 	print(game_developer, white)
-	print("press ❎ to start",
+	print(
+		"press ❎ to start",
 		0,
 		50,
 		yellow
@@ -254,14 +251,14 @@ function draw_play_game()
 	rectfill(
 		status_bar_x,
 		status_bar_y,
-		status_bar_x+status_bar_width,
-		status_bar_y+status_bar_height,
+		status_bar_x + status_bar_width,
+		status_bar_y + status_bar_height,
 		black
 	)
 
 	-- draw player stats
 	print(
-		"lives: ".. lives,
+		"lives: " .. lives,
 		1,
 		2,
 		white
@@ -269,13 +266,13 @@ function draw_play_game()
 
 	-- draw bricks
 	local i
-	for i=1,#brick_x do
-		if is_brick_visible[i] do
+	for i = 1, #brick_x do
+		if is_brick_visible[i] then
 			rectfill(
 				brick_x[i],
 				brick_y[i],
-				brick_x[i]+brick_width,
-				brick_y[i]+brick_height,
+				brick_x[i] + brick_width,
+				brick_y[i] + brick_height,
 				sand
 			)
 		end
@@ -293,19 +290,35 @@ function draw_play_game()
 	rectfill(
 		paddle_x,
 		paddle_y,
-		paddle_x+paddle_width,
-		paddle_y+paddle_height,
+		paddle_x + paddle_width,
+		paddle_y + paddle_height,
 		paddle_colour
 	)
 end
 
 function draw_game_over()
 	print(
-		"game over",
+		"you lose",
 		8,
 		50,
 		white
 	)
+	print(
+		"press ❎ to restart",
+		8,
+		60,
+		gray
+	)
+end
+
+function draw_game_win()
+	print(
+		"you win!",
+		8,
+		50,
+		white
+	)
+
 	print(
 		"press ❎ to restart",
 		8,
@@ -322,7 +335,7 @@ function update_start_game()
 	if btn(❎) then
 		-- update the game mode
 		sfx(start_sound)
-		game_mode="play game"
+		game_mode = "play game"
 
 		-- play the game
 		play_game()
@@ -331,7 +344,7 @@ end
 
 function update_play_game()
 	-- has a button been pressed?
-	local is_button_pressed=false
+	local is_button_pressed = false
 
 	-- what is the next position
 	-- of the ball?
@@ -341,106 +354,67 @@ function update_play_game()
 	-- move the paddle if left or
 	-- right is pressed
 	if btn(⬅️) then
-		paddle_deltax=-2.5
-		is_button_pressed=true
+		paddle_deltax = -2.5
+		is_button_pressed = true
 	end
 
 	if btn(➡️) then
-		paddle_deltax=2.5
-		is_button_pressed=true
+		paddle_deltax = 2.5
+		is_button_pressed = true
 	end
 
-	if not(is_button_pressed) then
-		paddle_deltax=
-			paddle_deltax/1.5
+	if not is_button_pressed then
+		paddle_deltax = paddle_deltax / 1.5
 	end
-	paddle_x=paddle_x+paddle_deltax
+	paddle_x = paddle_x + paddle_deltax
 	-- stop the paddle from moving
 	-- outside the bounds of the
 	-- game play area
-	paddle_x=mid(
+	paddle_x = mid(
 		0,
 		paddle_x,
-		screen_max_x-paddle_width
+		screen_max_x - paddle_width
 	)
-	nextx=ball_x+ball_deltax
-	nexty=ball_y+ball_deltay
+	nextx = ball_x + ball_deltax
+	nexty = ball_y + ball_deltay
 
 	-- bounce the ball off the left
 	-- and right walls of the play
 	-- area
-	if nextx > screen_right or
-		nextx < screen_left then
-		nextx=mid(
-									screen_left,
-									nextx,
-									screen_right
-								)
-		ball_deltax=-ball_deltax
+	if nextx > screen_right
+			or nextx < screen_left then
+		nextx = mid(
+			screen_left,
+			nextx,
+			screen_right
+		)
+		ball_deltax = -ball_deltax
 		sfx(wall_bounce_sound)
 	end
 
 	-- bounce the ball off the top
 	-- of the play area
 	if nexty < screen_top then
-		nexty=mid(
-									screen_bottom,
-									nexty,
-									screen_top
-								)
-		ball_deltay=-ball_deltay
+		nexty = mid(
+			screen_bottom,
+			nexty,
+			screen_top
+		)
+		ball_deltay = -ball_deltay
 		sfx(wall_bounce_sound)
 	end
 
 	-- check if the ball hits a
 	-- brick
-	for i=1,#brick_x do
-		if is_brick_visible[i] and
-			has_ball_collided(
-				nextx,
-				nexty,
-				brick_x[i],
-				brick_y[i],
-				brick_width,
-				brick_height
-			) then
-			-- handle collision by
-			-- finding out the
-			-- trajectory of the ball so
-			-- that we can appropriately
-			-- deflect it
-			if is_horizontal_deflect(
-							ball_x,
-							ball_y,
-							ball_deltax,
-							ball_deltay,
-							brick_x[i],
-							brick_y[i],
-							brick_width,
-							brick_height
-						) then
-				-- deflect in the x
-				-- direction
-				ball_deltax=-ball_deltax
-			else
-				-- deflect in the y
-				-- direction
-				ball_deltay=-ball_deltay
-			end
-			is_brick_visible[i]=false
-			sfx(brick_impact_sound)
-		end
-	end
-
-	-- check if the ball hits the
-	-- paddle
-	if has_ball_collided(
+	for i = 1, #brick_x do
+		if is_brick_visible[i]
+				and has_ball_collided(
 			nextx,
 			nexty,
-			paddle_x,
-			paddle_y,
-			paddle_width,
-			paddle_height
+			brick_x[i],
+			brick_y[i],
+			brick_width,
+			brick_height
 		) then
 			-- handle collision by
 			-- finding out the
@@ -448,41 +422,79 @@ function update_play_game()
 			-- that we can appropriately
 			-- deflect it
 			if is_horizontal_deflect(
-						 ball_x,
-							ball_y,
-							ball_deltax,
-							ball_deltay,
-							paddle_x,
-							paddle_y,
-							paddle_width,
-							paddle_height
-						) then
+				ball_x,
+				ball_y,
+				ball_deltax,
+				ball_deltay,
+				brick_x[i],
+				brick_y[i],
+				brick_width,
+				brick_height
+			) then
 				-- deflect in the x
 				-- direction
-				ball_deltax=-ball_deltax
+				ball_deltax = -ball_deltax
 			else
 				-- deflect in the y
 				-- direction
-				ball_deltay=-ball_deltay
+				ball_deltay = -ball_deltay
 			end
-			-- update the paddle colour
-			-- on collision
-			paddle_colour=orange
-			sfx(paddle_bounce_sound)
+			is_brick_visible[i] = false
+			sfx(brick_impact_sound)
+		end
 	end
 
-	ball_x=nextx
-	ball_y=nexty
+	-- check if the ball hits the
+	-- paddle
+	if has_ball_collided(
+		nextx,
+		nexty,
+		paddle_x,
+		paddle_y,
+		paddle_width,
+		paddle_height
+	) then
+		-- handle collision by
+		-- finding out the
+		-- trajectory of the ball so
+		-- that we can appropriately
+		-- deflect it
+		if is_horizontal_deflect(
+			ball_x,
+			ball_y,
+			ball_deltax,
+			ball_deltay,
+			paddle_x,
+			paddle_y,
+			paddle_width,
+			paddle_height
+		) then
+			-- deflect in the x
+			-- direction
+			ball_deltax = -ball_deltax
+		else
+			-- deflect in the y
+			-- direction
+			ball_deltay = -ball_deltay
+		end
+		-- update the paddle colour
+		-- on collision
+		paddle_colour = orange
+		sfx(paddle_bounce_sound)
+	end
+
+	ball_x = nextx
+	ball_y = nexty
 
 	-- set the paddle colour
-	paddle_colour=white
+	paddle_colour = white
 
 	-- if the ball hits the bottom
 	-- of the screen, the player
 	-- loses a life and we serve
 	-- the ball
 	if nexty > screen_bottom then
-		lives=lives-1
+		lives = lives - 1
 		if lives < 0 then
 			game_over()
 		else
@@ -490,44 +502,70 @@ function update_play_game()
 			serve_ball()
 		end
 	end
+
+	if not has_bricks_left(is_brick_visible) then
+		game_win()
+	end
+end
+
+function has_bricks_left(bricks)
+	local i
+	for i = 1, #bricks do
+		if bricks[i] == true then
+			return true
+		end
+	end
+	return false
 end
 
 function update_game_over()
 	if btn(❎) then
-		-- update the game mode
 		sfx(start_sound)
-		game_mode="play game"
+		game_mode = "play game"
 
-		-- play the game
 		play_game()
 	end
+end
 
+function update_game_win()
+	sfx(win_sound)
+
+	if btn(❎) then
+		sfx(start_sound)
+		game_mode = "play game"
+
+		play_game()
+	end
 end
 
 function update_pause_game()
 end
 
 function _update60()
-	if game_mode=="start game" then
+	if game_mode == "start game" then
 		update_start_game()
-	elseif game_mode=="play game" then
+	elseif game_mode == "play game" then
 		update_play_game()
-	elseif game_mode=="game over" then
+	elseif game_mode == "game over" then
 		update_game_over()
-	elseif game_mode=="pause game" then
+	elseif game_mode == "pause game" then
 		update_pause_game()
+	elseif game_mode == "game win" then
+		update_game_win()
 	end
 end
 
 function _draw()
-	if game_mode=="start game" then
+	if game_mode == "start game" then
 		draw_start_game()
-	elseif game_mode=="play game" then
+	elseif game_mode == "play game" then
 		draw_play_game()
-	elseif game_mode=="game over" then
+	elseif game_mode == "game over" then
 		draw_game_over()
-	elseif game_mode=="pause game" then
+	elseif game_mode == "pause game" then
 		draw_pause_game()
+	elseif game_mode == "game win" then
+		draw_game_win()
 	end
 end
 
