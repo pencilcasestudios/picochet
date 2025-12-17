@@ -87,13 +87,16 @@ function build_bricks()
 	is_brick_visible={}
 
 	local i
-	for i=1,6 do
+	for i=1,35 do
 		add(
 			brick_x,(
-				5+(i-1)*(brick_width+2)
+				2+((i-1)%7)*(brick_width+2)
 			)
 		)
-		add(brick_y,50)
+		add(
+			brick_y,
+			20+flr((i-1)/7)*(brick_height+2)
+		)
 		add(is_brick_visible,true)
 	end
 end
