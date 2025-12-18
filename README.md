@@ -13,7 +13,7 @@ I am learning to make games using PICO-8. This repo is me following along with a
 08. [x] [Breakout #08 - Final Collision - Pico-8 Hero](https://youtu.be/fBi6vPcFmJ4?si=VsiZHfmB6HCPWPsP)
 09. [x] [Breakout #09 - Game States - Pico-8 Hero](https://youtu.be/5jp1hYvVZlc?si=0ABiBBnsMzrbWn4Q)
 10. [x] [Breakout #10 - Bricks - Pico-8 Hero](https://youtu.be/OakTpLFyaRA?si=CoppZCX_mTJ5Anim)
-11. [ ] [Breakout #11 - Brick Lines - Pico-8 Hero](https://youtu.be/sqrjlkdwz5I?si=Reny_dixsCrQ8Xi1)
+11. [x] [Breakout #11 - Brick Lines - Pico-8 Hero](https://youtu.be/sqrjlkdwz5I?si=Reny_dixsCrQ8Xi1)
 12. [ ] [Breakout #12 - Debugging - Pico-8 Hero]()
 13. [ ] [Breakout #13 - Sticky Paddle - Pico-8 Hero]()
 14. [ ] [Breakout #14 - Angle Control - Pico-8 Hero]()
@@ -77,4 +77,5 @@ I am learning to make games using PICO-8. This repo is me following along with a
 72. [ ] [Breakout #72 - Sudden Death - Pico-8 Hero]()
 73. [ ] [Breakout #73 - Fixing Megaball - Pico-8 Hero]()
 74. [ ] [Breakout #74 - Clip - Pico-8 Hero]()
-75. [ ] [Breakout #75 - Ship It! - Pico-8 Her]()o
+75. [ ] [Breakout #75 - Ship It! - Pico-8 Hero]()
+76. [x] [How to upload Pico-8 games to itch.io](https://youtu.be/cXaqrK7yl9U?si=XomZIcybW8_VOCQQ)
