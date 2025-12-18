@@ -350,6 +350,9 @@ function update_play_game()
 	-- of the ball?
 	local nextx
 	local nexty
+	-- prevent the ball from
+	-- deflecting off more than
+	-- one box
 
 	-- move the paddle if left or
 	-- right is pressed
@@ -406,6 +409,8 @@ function update_play_game()
 
 	-- check if the ball hits a
 	-- brick
+	local brick_hit
+	brick_hit = false
 	for i = 1, #brick_x do
 		if is_brick_visible[i]
 				and has_ball_collided(
@@ -421,26 +426,33 @@ function update_play_game()
 			-- trajectory of the ball so
 			-- that we can appropriately
 			-- deflect it
-			if is_horizontal_deflect(
-				ball_x,
-				ball_y,
-				ball_deltax,
-				ball_deltay,
-				brick_x[i],
-				brick_y[i],
-				brick_width,
-				brick_height
-			) then
-				-- deflect in the x
-				-- direction
-				ball_deltax = -ball_deltax
-			else
-				-- deflect in the y
-				-- direction
-				ball_deltay = -ball_deltay
+
+			-- handle cases when the
+			-- ball hits two bricks at a
+			-- time
+			if not brick_hit then
+				if is_horizontal_deflect(
+					ball_x,
+					ball_y,
+					ball_deltax,
+					ball_deltay,
+					brick_x[i],
+					brick_y[i],
+					brick_width,
+					brick_height
+				) then
+					-- deflect in the x
+					-- direction
+					ball_deltax = -ball_deltax
+				else
+					-- deflect in the y
+					-- direction
+					ball_deltay = -ball_deltay
+				end
+				brick_hit = true
+				is_brick_visible[i] = false
+				sfx(brick_impact_sound)
 			end
-			is_brick_visible[i] = false
-			sfx(brick_impact_sound)
 		end
 	end
 
