@@ -484,10 +484,21 @@ function update_play_game()
 			-- deflect in the x
 			-- direction
 			ball_deltax = -ball_deltax
+
+			if ball_x < paddle_x + paddle_width / 2 then
+				nextx = paddle_x - ball_radius
+			else
+				nextx = paddle_x + paddle_width + ball_radius
+			end
 		else
 			-- deflect in the y
 			-- direction
 			ball_deltay = -ball_deltay
+
+			-- reduce the occurrance of
+			-- the ball getting stuck in
+			-- the paddle
+			nexty = paddle_y - ball_radius
 		end
 		-- update the paddle colour
 		-- on collision
