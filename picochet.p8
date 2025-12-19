@@ -108,7 +108,7 @@ function serve_ball()
 
 	-- ball
 	ball_x = paddle_x + flr(paddle_width / 2)
-	ball_y = paddle_y - ball_radius
+	ball_y = paddle_y - ball_radius - 1
 	ball_deltax = 1
 	ball_deltay = -1
 
@@ -370,6 +370,10 @@ function update_play_game()
 		is_button_pressed = true
 	end
 
+	if is_paddle_sticky and btnp(❎) then
+		is_paddle_sticky = false
+	end
+
 	if not is_button_pressed then
 		paddle_deltax = paddle_deltax / 1.5
 	end
@@ -386,7 +390,7 @@ function update_play_game()
 	if is_paddle_sticky then
 		-- the ball moves with the paddle
 		ball_x = paddle_x + flr(paddle_width / 2)
-		ball_y = paddle_y - ball_radius
+		ball_y = paddle_y - ball_radius - 1
 	else
 		-- regular ball physics
 		nextx = ball_x + ball_deltax
