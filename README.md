@@ -14,7 +14,7 @@ I am learning to make games using PICO-8. This repo is me following along with a
 09. [x] [Breakout #09 - Game States - Pico-8 Hero](https://youtu.be/5jp1hYvVZlc?si=0ABiBBnsMzrbWn4Q)
 10. [x] [Breakout #10 - Bricks - Pico-8 Hero](https://youtu.be/OakTpLFyaRA?si=CoppZCX_mTJ5Anim)
 11. [x] [Breakout #11 - Brick Lines - Pico-8 Hero](https://youtu.be/sqrjlkdwz5I?si=Reny_dixsCrQ8Xi1)
-12. [ ] [Breakout #12 - Debugging - Pico-8 Hero]()
+12. [x] [Breakout #12 - Debugging - Pico-8 Hero]()
 13. [ ] [Breakout #13 - Sticky Paddle - Pico-8 Hero]()
 14. [ ] [Breakout #14 - Angle Control - Pico-8 Hero]()
 15. [ ] [Breakout #15 - Combo Chains - Pico-8 Hero]()
