@@ -103,11 +103,14 @@ function build_bricks()
 end
 
 function serve_ball()
+	-- paddle
+	is_paddle_sticky = true
+
 	-- ball
-	ball_x = 50
-	ball_y = screen_top
+	ball_x = paddle_x + flr(paddle_width / 2)
+	ball_y = paddle_y - ball_radius
 	ball_deltax = 1
-	ball_deltay = 1
+	ball_deltay = -1
 
 	sfx(start_sound)
 end
@@ -379,158 +382,166 @@ function update_play_game()
 		paddle_x,
 		screen_max_x - paddle_width
 	)
-	nextx = ball_x + ball_deltax
-	nexty = ball_y + ball_deltay
 
-	-- bounce the ball off the left
-	-- and right walls of the play
-	-- area
-	if nextx > screen_right
-			or nextx < screen_left then
-		nextx = mid(
-			screen_left,
+	if is_paddle_sticky then
+		-- the ball moves with the paddle
+		ball_x = paddle_x + flr(paddle_width / 2)
+		ball_y = paddle_y - ball_radius
+	else
+		-- regular ball physics
+		nextx = ball_x + ball_deltax
+		nexty = ball_y + ball_deltay
+
+		-- bounce the ball off the left
+		-- and right walls of the play
+		-- area
+		if nextx > screen_right
+				or nextx < screen_left then
+			nextx = mid(
+				screen_left,
+				nextx,
+				screen_right
+			)
+			ball_deltax = -ball_deltax
+			sfx(wall_bounce_sound)
+		end
+
+		-- bounce the ball off the top
+		-- of the play area
+		if nexty < screen_top then
+			nexty = mid(
+				screen_bottom,
+				nexty,
+				screen_top
+			)
+			ball_deltay = -ball_deltay
+			sfx(wall_bounce_sound)
+		end
+
+		-- check if the ball hits a
+		-- brick
+		local brick_hit
+		brick_hit = false
+		for i = 1, #brick_x do
+			if is_brick_visible[i]
+					and has_ball_collided(
+				nextx,
+				nexty,
+				brick_x[i],
+				brick_y[i],
+				brick_width,
+				brick_height
+			) then
+				-- handle collision by
+				-- finding out the
+				-- trajectory of the ball so
+				-- that we can appropriately
+				-- deflect it
+
+				-- handle cases when the
+				-- ball hits two bricks at a
+				-- time
+				if not brick_hit then
+					if is_horizontal_deflect(
+						ball_x,
+						ball_y,
+						ball_deltax,
+						ball_deltay,
+						brick_x[i],
+						brick_y[i],
+						brick_width,
+						brick_height
+					) then
+						-- deflect in the x
+						-- direction
+						ball_deltax = -ball_deltax
+					else
+						-- deflect in the y
+						-- direction
+						ball_deltay = -ball_deltay
+					end
+					brick_hit = true
+					is_brick_visible[i] = false
+					sfx(brick_impact_sound)
+				end
+			end
+		end
+
+		-- check if the ball hits the
+		-- paddle
+		if has_ball_collided(
 			nextx,
-			screen_right
-		)
-		ball_deltax = -ball_deltax
-		sfx(wall_bounce_sound)
-	end
-
-	-- bounce the ball off the top
-	-- of the play area
-	if nexty < screen_top then
-		nexty = mid(
-			screen_bottom,
 			nexty,
-			screen_top
-		)
-		ball_deltay = -ball_deltay
-		sfx(wall_bounce_sound)
-	end
-
-	-- check if the ball hits a
-	-- brick
-	local brick_hit
-	brick_hit = false
-	for i = 1, #brick_x do
-		if is_brick_visible[i]
-				and has_ball_collided(
-			nextx,
-			nexty,
-			brick_x[i],
-			brick_y[i],
-			brick_width,
-			brick_height
+			paddle_x,
+			paddle_y,
+			paddle_width,
+			paddle_height
 		) then
 			-- handle collision by
 			-- finding out the
 			-- trajectory of the ball so
 			-- that we can appropriately
 			-- deflect it
+			if is_horizontal_deflect(
+				ball_x,
+				ball_y,
+				ball_deltax,
+				ball_deltay,
+				paddle_x,
+				paddle_y,
+				paddle_width,
+				paddle_height
+			) then
+				-- deflect in the x
+				-- direction
+				ball_deltax = -ball_deltax
 
-			-- handle cases when the
-			-- ball hits two bricks at a
-			-- time
-			if not brick_hit then
-				if is_horizontal_deflect(
-					ball_x,
-					ball_y,
-					ball_deltax,
-					ball_deltay,
-					brick_x[i],
-					brick_y[i],
-					brick_width,
-					brick_height
-				) then
-					-- deflect in the x
-					-- direction
-					ball_deltax = -ball_deltax
+				if ball_x < paddle_x + paddle_width / 2 then
+					nextx = paddle_x - ball_radius
 				else
-					-- deflect in the y
-					-- direction
-					ball_deltay = -ball_deltay
+					nextx = paddle_x + paddle_width + ball_radius
 				end
-				brick_hit = true
-				is_brick_visible[i] = false
-				sfx(brick_impact_sound)
-			end
-		end
-	end
-
-	-- check if the ball hits the
-	-- paddle
-	if has_ball_collided(
-		nextx,
-		nexty,
-		paddle_x,
-		paddle_y,
-		paddle_width,
-		paddle_height
-	) then
-		-- handle collision by
-		-- finding out the
-		-- trajectory of the ball so
-		-- that we can appropriately
-		-- deflect it
-		if is_horizontal_deflect(
-			ball_x,
-			ball_y,
-			ball_deltax,
-			ball_deltay,
-			paddle_x,
-			paddle_y,
-			paddle_width,
-			paddle_height
-		) then
-			-- deflect in the x
-			-- direction
-			ball_deltax = -ball_deltax
-
-			if ball_x < paddle_x + paddle_width / 2 then
-				nextx = paddle_x - ball_radius
 			else
-				nextx = paddle_x + paddle_width + ball_radius
+				-- deflect in the y
+				-- direction
+				ball_deltay = -ball_deltay
+
+				-- reduce the occurrance of
+				-- the ball getting stuck in
+				-- the paddle
+				nexty = paddle_y - ball_radius
 			end
-		else
-			-- deflect in the y
-			-- direction
-			ball_deltay = -ball_deltay
-
-			-- reduce the occurrance of
-			-- the ball getting stuck in
-			-- the paddle
-			nexty = paddle_y - ball_radius
+			-- update the paddle colour
+			-- on collision
+			paddle_colour = orange
+			sfx(paddle_bounce_sound)
 		end
-		-- update the paddle colour
-		-- on collision
-		paddle_colour = orange
-		sfx(paddle_bounce_sound)
-	end
 
-	ball_x = nextx
-	ball_y = nexty
+		ball_x = nextx
+		ball_y = nexty
 
-	-- set the paddle colour
-	paddle_colour = white
+		-- set the paddle colour
+		paddle_colour = white
 
-	-- if the ball hits the bottom
-	-- of the screen, the player
-	-- loses a life and we serve
-	-- the ball
-	if nexty > screen_bottom then
-		lives = lives - 1
-		if lives < 0 then
-			game_over()
-		else
-			sfx(out_of_bounds_sound)
-			serve_ball()
+		-- if the ball hits the bottom
+		-- of the screen, the player
+		-- loses a life and we serve
+		-- the ball
+		if nexty > screen_bottom then
+			lives = lives - 1
+			if lives < 0 then
+				game_over()
+			else
+				sfx(out_of_bounds_sound)
+				serve_ball()
+			end
 		end
-	end
 
-	if not has_bricks_left(is_brick_visible) then
-		sfx(win_sound)
+		if not has_bricks_left(is_brick_visible) then
+			sfx(win_sound)
 
-		game_win()
+			game_win()
+		end
 	end
 end
 
