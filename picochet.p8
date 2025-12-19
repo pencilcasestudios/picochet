@@ -74,6 +74,7 @@ function play_game()
 	lives = 2
 
 	-- bricks
+	total_bricks = 49
 	brick_width = 16
 	brick_height = 6
 
@@ -88,7 +89,7 @@ function build_bricks()
 	is_brick_visible = {}
 
 	local i
-	for i = 1, 70 do
+	for i = 1, total_bricks do
 		add(
 			brick_x,
 			(2 + ((i - 1) % 7) * (brick_width + 2))
