@@ -72,6 +72,10 @@ function play_game()
 
 	-- player stats
 	lives = 2
+	score = 0
+	paddle_hit_points = 10
+	wall_hit_points = 5
+	brick_hit_points = 20
 
 	-- bricks
 	total_bricks = 49
@@ -268,6 +272,13 @@ function draw_play_game()
 		white
 	)
 
+	print(
+		"score: " .. score,
+		40,
+		2,
+		white
+	)
+
 	-- draw bricks
 	local i
 	for i = 1, #brick_x do
@@ -408,6 +419,7 @@ function update_play_game()
 			)
 			ball_deltax = -ball_deltax
 			sfx(wall_bounce_sound)
+			score = score + wall_hit_points
 		end
 
 		-- bounce the ball off the top
@@ -420,6 +432,7 @@ function update_play_game()
 			)
 			ball_deltay = -ball_deltay
 			sfx(wall_bounce_sound)
+			score = score + wall_hit_points
 		end
 
 		-- check if the ball hits a
@@ -467,6 +480,7 @@ function update_play_game()
 					brick_hit = true
 					is_brick_visible[i] = false
 					sfx(brick_impact_sound)
+					score = score + brick_hit_points
 				end
 			end
 		end
@@ -519,6 +533,7 @@ function update_play_game()
 			-- on collision
 			paddle_colour = orange
 			sfx(paddle_bounce_sound)
+			score = score + paddle_hit_points
 		end
 
 		ball_x = nextx
