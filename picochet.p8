@@ -116,8 +116,36 @@ function serve_ball()
 	ball_y = paddle_y - ball_radius - 1
 	ball_deltax = 1
 	ball_deltay = -1
+	-- x: 0.50 - high angles
+	-- x: 1.30 - low angles
+	ball_angle = 1
 
 	sfx(start_sound)
+end
+
+function set_ball_angle(angle)
+	ball_angle = angle
+	if angle == 2 then
+		ball_deltax = 0.50 * sign(ball_deltax)
+		ball_deltay = 1.30 * sign(ball_deltay)
+	elseif angle == 0 then
+		ball_deltax = 1.30 * sign(ball_deltax)
+		ball_deltay = 0.50 * sign(ball_deltay)
+	else
+		ball_deltax = 1 * sign(ball_deltax)
+		ball_deltay = 1 * sign(ball_deltay)
+	end
+end
+
+function sign(n)
+	if n < 0 then
+		return -1
+	elseif n > 0 then
+		return 1
+	else
+		-- n == 0
+		return 0
+	end
 end
 
 function has_ball_collided(bx, by, box_x, box_y, box_width, box_height)
@@ -529,6 +557,26 @@ function update_play_game()
 				-- the ball getting stuck in
 				-- the paddle
 				nexty = paddle_y - ball_radius
+
+				if abs(paddle_deltax) > 2 then
+					-- allow deflection angle
+					-- to change
+					if sign(paddle_deltax) == sign(ball_deltax) then
+						-- reduce the ball angle
+						set_ball_angle(mid(
+							0, ball_angle - 1, 2
+						))
+					else
+						-- increase the ball angle
+						if ball_angle == 2 then
+							ball_deltax = -ball_deltax
+						else
+							set_ball_angle(mid(
+								0, ball_angle + 1, 2
+							))
+						end
+					end
+				end
 			end
 			-- update the paddle colour
 			-- on collision
