@@ -24,16 +24,16 @@ function _init()
 	maroon = 2
 	dark_green = 3
 	brown = 4
-	dark_gray =5
+	dark_gray = 5
 	gray = 6
 	white = 7
 	red = 8
 	orange = 9
 	yellow = 10
-	light_green=11
-	blue=12
-	purple=13
-	pink=14
+	light_green = 11
+	blue = 12
+	purple = 13
+	pink = 14
 	sand = 15
 
 	paddle_colour = white
@@ -362,11 +362,26 @@ function draw_play_game()
 end
 
 function draw_game_over()
+	-- shadow
+	print(
+		"you lose?",
+		9,
+		51,
+		black
+	)
+	-- text
 	print(
 		"you lose?",
 		8,
 		50,
 		white
+	)
+
+	print(
+		"press ❎ to restart",
+		9,
+		61,
+		black
 	)
 	print(
 		"press ❎ to restart",
@@ -377,6 +392,14 @@ function draw_game_over()
 end
 
 function draw_game_win()
+	-- shadow
+	print(
+		"you win?",
+		9,
+		51,
+		black
+	)
+	-- text
 	print(
 		"you win?",
 		8,
@@ -384,6 +407,15 @@ function draw_game_win()
 		white
 	)
 
+	-- shadow
+	print(
+		"press ❎ to restart",
+		9,
+		61,
+		black
+	)
+
+	-- text
 	print(
 		"press ❎ to restart",
 		8,
