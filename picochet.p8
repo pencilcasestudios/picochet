@@ -90,7 +90,8 @@ function play_game()
 	combo_hit = 0
 
 	-- bricks
-	total_bricks = 49
+	total_bricks = 64
+	bricks_per_row = 8
 	brick_width = 16
 	brick_height = 6
 
@@ -108,11 +109,11 @@ function build_bricks()
 	for i = 1, total_bricks do
 		add(
 			brick_x,
-			(2 + ((i - 1) % 7) * (brick_width + 2))
+			((i - 1) % bricks_per_row) * brick_width
 		)
 		add(
 			brick_y,
-			20 + flr((i - 1) / 7) * (brick_height + 2)
+			20 + flr((i - 1) / 8) * (brick_height + 2)
 		)
 		add(is_brick_visible, true)
 	end
