@@ -55,6 +55,14 @@ function _init()
 	combo_hit_6_sound = 13
 	combo_hit_7_sound = 14
 	combo_hit_8_sound = 15
+
+	-- levels
+	brick_pattern = "bbbbbbbb//bbbbbbb/bbbbbb/bbbbb/bbbb/bbb/bb/b/b/bbbbbbbb"
+end
+
+function shadowed_text(text, x, y, shadow_colour, text_colour)
+	print(text, x + 1, y + 1, shadow_colour)
+	print(text, x, y, text_colour)
 end
 
 function play_game()
@@ -96,32 +104,46 @@ function play_game()
 	brick_width = 16
 	brick_height = 6
 
-	build_bricks()
+	build_bricks(brick_pattern)
 
 	serve_ball()
 end
 
-function build_bricks()
+function build_bricks(pattern)
 	brick_x = {}
 	brick_y = {}
 	is_brick_visible = {}
 
-	local i
-	for i = 1, total_bricks do
-		add(
-			brick_x,
-			((i - 1)
-						% max_bricks_per_row)
-					* brick_width
-		)
-		local gap_from_top = 30
-		add(
-			brick_y,
-			gap_from_top
-					+ (flr((i - 1)
-						/ max_bricks_per_column) * brick_height)
-		)
-		add(is_brick_visible, true)
+	local j = 0
+	for i = 1, #pattern do
+		local char = sub(pattern, i, i)
+		local val = tonum(char)
+		local pixel_gap_from_top = 30
+
+		if char == "b" then
+			add(
+				brick_x,
+				(j % max_bricks_per_row)
+						* brick_width
+			)
+			add(
+				brick_y,
+				pixel_gap_from_top
+						+ flr(j / max_bricks_per_row)
+						* brick_height
+			)
+			add(is_brick_visible, true)
+			j = j + 1
+		elseif val != nil and val > 0 then
+			j = j + val
+		elseif char == "/" then
+			-- jump to start of next row ONLY if we aren't
+			-- already at the start of one
+			if j % max_bricks_per_row != 0 then
+				j = (flr(j / max_bricks_per_row) + 1)
+						* max_bricks_per_row
+			end
+		end
 	end
 end
 
@@ -368,32 +390,9 @@ function draw_play_game()
 	)
 end
 
-function shadowed_text(text, x, y, shadow_colour, text_colour)
-	print(text, x + 1, y + 1, shadow_colour)
-	print(text, x, y, text_colour)
-end
-
 function draw_game_over()
 	shadowed_text(
 		"you lose?",
-		9,
-		51,
-		black,
-		white
-	)
-
-	shadowed_text(
-		"press ❎ to restart",
-		9,
-		61,
-		black,
-		gray
-	)
-end
-
-function draw_game_win()
-	shadowed_text(
-		"you win?",
 		9,
 		51,
 		black,
@@ -437,10 +436,6 @@ function draw_pause_game()
 		black,
 		gray
 	)
-end
-
-function draw_pause_game()
-	print("paused")
 end
 
 function update_start_game()
