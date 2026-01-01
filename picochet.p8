@@ -14,7 +14,7 @@ __lua__
 
 function _init()
 	-- game
-	game_version = "0.0.1"
+	game_version = "0.0.5"
 	game_developer = "pencil case studios"
 	game_mode = "start game"
 
@@ -296,7 +296,7 @@ function draw_start_game()
 	print(
 		"press ❎ to start",
 		0,
-		50,
+		51,
 		yellow
 	)
 end
@@ -368,65 +368,73 @@ function draw_play_game()
 	)
 end
 
+function shadowed_text(text, x, y, shadow_colour, text_colour)
+	print(text, x + 1, y + 1, shadow_colour)
+	print(text, x, y, text_colour)
+end
+
 function draw_game_over()
-	-- shadow
-	print(
+	shadowed_text(
 		"you lose?",
 		9,
 		51,
-		black
-	)
-	-- text
-	print(
-		"you lose?",
-		8,
-		50,
+		black,
 		white
 	)
 
-	print(
+	shadowed_text(
 		"press ❎ to restart",
 		9,
 		61,
-		black
-	)
-	print(
-		"press ❎ to restart",
-		8,
-		60,
+		black,
 		gray
 	)
 end
 
 function draw_game_win()
-	-- shadow
-	print(
+	shadowed_text(
 		"you win?",
 		9,
 		51,
-		black
-	)
-	-- text
-	print(
-		"you win?",
-		8,
-		50,
+		black,
 		white
 	)
 
-	-- shadow
-	print(
+	shadowed_text(
 		"press ❎ to restart",
 		9,
 		61,
-		black
+		black,
+		gray
+	)
+end
+
+function draw_game_win()
+	shadowed_text(
+		"you win?",
+		9,
+		51,
+		black,
+		white
 	)
 
-	-- text
-	print(
+	shadowed_text(
 		"press ❎ to restart",
-		8,
-		60,
+		9,
+		61,
+		black,
+		gray
+	)
+end
+
+function draw_pause_game()
+	shadowed_text("paused", 9, 51, black, white)
+
+	shadowed_text(
+		"press ❎ to restart",
+		9,
+		61,
+		black,
 		gray
 	)
 end
