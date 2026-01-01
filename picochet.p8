@@ -57,7 +57,17 @@ function _init()
 	combo_hit_8_sound = 15
 
 	-- levels
-	brick_pattern = "bbbbbbbb//bbbbbbb/bbbbbb/bbbbb/bbbb/bbb/bb/b/b/bbbbbbbb"
+	brick_pattern = "bbbbbbbb/"
+			.. "8/"
+			.. "bbbbbbb/"
+			.. "bbbbbb/"
+			.. "bbbbb/"
+			.. "bbbb/"
+			.. "bbb/"
+			.. "bb/"
+			.. "b/"
+			.. "b/"
+			.. "bbbbbbbb"
 end
 
 function shadowed_text(text, x, y, shadow_colour, text_colour)
