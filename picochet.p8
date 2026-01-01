@@ -91,7 +91,8 @@ function play_game()
 
 	-- bricks
 	total_bricks = 64
-	bricks_per_row = 8
+	max_bricks_per_column = 8
+	max_bricks_per_row = 8
 	brick_width = 16
 	brick_height = 6
 
@@ -109,11 +110,16 @@ function build_bricks()
 	for i = 1, total_bricks do
 		add(
 			brick_x,
-			((i - 1) % bricks_per_row) * brick_width
+			((i - 1)
+						% max_bricks_per_row)
+					* brick_width
 		)
+		local gap_from_top = 30
 		add(
 			brick_y,
-			20 + flr((i - 1) / 8) * (brick_height + 2)
+			gap_from_top
+					+ (flr((i - 1)
+						/ max_bricks_per_column) * brick_height)
 		)
 		add(is_brick_visible, true)
 	end
@@ -337,8 +343,8 @@ function draw_play_game()
 			rectfill(
 				brick_x[i],
 				brick_y[i],
-				brick_x[i] + brick_width,
-				brick_y[i] + brick_height,
+				brick_x[i] + brick_width - 1,
+				brick_y[i] + brick_height - 1,
 				sand
 			)
 		end
