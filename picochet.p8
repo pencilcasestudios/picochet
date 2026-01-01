@@ -13,6 +13,9 @@ __lua__
 -- (aka @teamworkcast)
 
 function _init()
+	-- debug
+	debug = ""
+
 	-- game
 	game_version = "0.0.5"
 	game_developer = "pencil case studios"
@@ -56,18 +59,23 @@ function _init()
 	combo_hit_7_sound = 14
 	combo_hit_8_sound = 15
 
-	-- levels
-	brick_pattern = "bbbbbbbb/"
-			.. "8/"
-			.. "bbbbbbb/"
-			.. "bbbbbb/"
-			.. "bbbbb/"
-			.. "bbbb/"
-			.. "bbb/"
-			.. "bb/"
-			.. "b/"
-			.. "b/"
-			.. "bbbbbbbb"
+	brick_pattern =
+		-- "/" = end of line
+
+		-- number = number of bricks
+
+		-- "x" = one brick
+
+		-- "." = empty space
+		"8/"
+				.. "xxxxxxxx/"
+				.. "x.xxxx.x/"
+				.. "xxxxxxxx/"
+				.. "xxx..xxx/"
+				.. "x.xxxx.x/"
+				.. "xx....xx/"
+				.. "xxxxxxxx/"
+				.. "8/"
 end
 
 function shadowed_text(text, x, y, shadow_colour, text_colour)
@@ -130,7 +138,8 @@ function build_bricks(pattern)
 		local val = tonum(char)
 		local pixel_gap_from_top = 30
 
-		if char == "b" then
+		if char == "x" then
+			-- add a brick
 			add(
 				brick_x,
 				(j % max_bricks_per_row)
@@ -144,11 +153,15 @@ function build_bricks(pattern)
 			)
 			add(is_brick_visible, true)
 			j = j + 1
+		elseif char == "." then
+			-- add an empty space
+			j = j + 1
 		elseif val != nil and val > 0 then
 			j = j + val
 		elseif char == "/" then
-			-- jump to start of next row ONLY if we aren't
-			-- already at the start of one
+			-- jump to start of next row
+			-- ONLY if we aren't already
+			-- at the start of one
 			if j % max_bricks_per_row != 0 then
 				j = (flr(j / max_bricks_per_row) + 1)
 						* max_bricks_per_row
