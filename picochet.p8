@@ -346,27 +346,37 @@ function draw_play_game()
 		black
 	)
 
-	-- draw player stats
-	print(
-		"lives: " .. lives,
-		1,
-		2,
-		white
-	)
+	if debug != "" then
+		-- display debug information
+		print(
+			"debug: " .. debug,
+			1,
+			2,
+			white
+		)
+	else
+		-- display player stats
+		print(
+			"lives: " .. lives,
+			1,
+			2,
+			white
+		)
 
-	print(
-		"score: " .. score,
-		40,
-		2,
-		white
-	)
+		print(
+			"score: " .. score,
+			40,
+			2,
+			white
+		)
 
-	print(
-		"combo: " .. combo_hit,
-		90,
-		2,
-		white
-	)
+		print(
+			"combo: " .. combo_hit,
+			90,
+			2,
+			white
+		)
+	end
 
 	-- draw bricks
 	local i
