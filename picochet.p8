@@ -17,7 +17,7 @@ function _init()
 	debug = ""
 
 	-- game
-	game_version = "0.0.5"
+	game_version = "0.0.6"
 	game_developer = "pencil case studios"
 	game_mode = "start game"
 
@@ -47,7 +47,7 @@ function _init()
 	paddle_bounce_sound = 2
 	out_of_bounds_sound = 3
 	brick_impact_sound = 4
-	win_sound = 5
+	game_win_sound = 5
 	game_over_sound = 6
 	combo_hit_0_sound = 7
 	combo_hit_1_sound = 8
@@ -58,24 +58,31 @@ function _init()
 	combo_hit_6_sound = 13
 	combo_hit_7_sound = 14
 	combo_hit_8_sound = 15
+	stage_clear_sound = 16
 
-	brick_pattern =
-		-- "/" = end of line
+	-- stag
+	stage_number = 1
 
-		-- number = number of bricks
-
-		-- "x" = one brick
-
-		-- "." = empty space
-		"8/"
-				.. "xxxxxxxx/"
-				.. "x.xxxx.x/"
-				.. "xxxxxxxx/"
-				.. "xxx..xxx/"
-				.. "x.xxxx.x/"
-				.. "xx....xx/"
-				.. "xxxxxxxx/"
-				.. "8/"
+	-- brick patterns
+	-- 	"/" = end of line
+	-- 	number = number of bricks
+	-- 			"8/" = blank row
+	-- 	"x" = one brick
+	-- 	"." = empty space
+	brick_patterns = {}
+	brick_patterns[1] = "x"
+	brick_patterns[2] = "xx"
+	brick_patterns[3] = "xxx"
+	brick_patterns[4] = "xxxx"
+	brick_patterns[5] = "8/"
+			.. "xxxxxxxx/"
+			.. "x.xxxx.x/"
+			.. "xxxxxxxx/"
+			.. "xxx..xxx/"
+			.. "x.xxxx.x/"
+			.. "xx....xx/"
+			.. "xxxxxxxx/"
+			.. "8/"
 end
 
 function shadowed_text(text, x, y, shadow_colour, text_colour)
@@ -115,6 +122,10 @@ function play_game()
 	brick_hit_points = 20
 	combo_hit = 0
 
+	-- stage
+	stage_number = 1
+	stage = brick_patterns[stage_number]
+
 	-- bricks
 	total_bricks = 64
 	max_bricks_per_column = 8
@@ -122,9 +133,30 @@ function play_game()
 	brick_width = 16
 	brick_height = 6
 
-	build_bricks(brick_pattern)
+	build_bricks(stage)
 
 	serve_ball()
+end
+
+function next_stage()
+	-- paddle
+	paddle_x = 54
+	paddle_y = 120
+	paddle_deltax = 0
+
+	-- stage
+	stage_number = stage_number + 1
+
+	if stage_number > #brick_patterns then
+		sfx(game_win_sound)
+		game_win()
+	else
+		stage = brick_patterns[stage_number]
+
+		build_bricks(stage)
+
+		serve_ball()
+	end
 end
 
 function build_bricks(pattern)
@@ -322,6 +354,10 @@ function is_horizontal_deflect(bx, by, bdx, bdy, tx, ty, tw, th)
 	return false
 end
 
+function stage_clear()
+	game_mode = "stage clear"
+end
+
 function game_over()
 	game_mode = "game over"
 end
@@ -384,7 +420,7 @@ function draw_play_game()
 		)
 
 		print(
-			"combo: " .. combo_hit,
+			"stage: " .. stage_number,
 			90,
 			2,
 			white
@@ -423,6 +459,24 @@ function draw_play_game()
 	)
 end
 
+function draw_stage_clear()
+	shadowed_text(
+		"stage clear!",
+		9,
+		51,
+		black,
+		white
+	)
+
+	shadowed_text(
+		"press ❎ to continue",
+		9,
+		61,
+		black,
+		gray
+	)
+end
+
 function draw_game_over()
 	shadowed_text(
 		"you lose?",
@@ -442,8 +496,9 @@ function draw_game_over()
 end
 
 function draw_game_win()
+	cls(purple)
 	shadowed_text(
-		"you win?",
+		"congratulations! you win?",
 		9,
 		51,
 		black,
@@ -472,7 +527,7 @@ function draw_pause_game()
 end
 
 function update_start_game()
-	if btn(❎) then
+	if btnp(❎) then
 		-- update the game mode
 		sfx(start_sound)
 		game_mode = "play game"
@@ -506,7 +561,8 @@ function update_play_game()
 		is_button_pressed = true
 	end
 
-	if is_paddle_sticky and btnp(❎) then
+	if is_paddle_sticky
+			and btnp(❎) then
 		is_paddle_sticky = false
 	end
 
@@ -710,9 +766,9 @@ function update_play_game()
 		end
 
 		if not has_bricks_left(is_brick_visible) then
-			sfx(win_sound)
+			sfx(stage_clear_sound)
 
-			game_win()
+			stage_clear()
 		end
 	end
 end
@@ -727,6 +783,14 @@ function has_bricks_left(bricks)
 	return false
 end
 
+function update_stage_clear()
+	if btnp(❎) then
+		game_mode = "play game"
+
+		next_stage()
+	end
+end
+
 function update_game_over()
 	if btn(❎) then
 		sfx(start_sound)
@@ -737,11 +801,9 @@ function update_game_over()
 end
 
 function update_game_win()
-	if btn(❎) then
+	if btnp(❎) then
 		sfx(start_sound)
-		game_mode = "play game"
-
-		play_game()
+		game_mode = "start game"
 	end
 end
 
@@ -753,6 +815,8 @@ function _update60()
 		update_start_game()
 	elseif game_mode == "play game" then
 		update_play_game()
+	elseif game_mode == "stage clear" then
+		update_stage_clear()
 	elseif game_mode == "game over" then
 		update_game_over()
 	elseif game_mode == "pause game" then
@@ -767,6 +831,8 @@ function _draw()
 		draw_start_game()
 	elseif game_mode == "play game" then
 		draw_play_game()
+	elseif game_mode == "stage clear" then
+		draw_stage_clear()
 	elseif game_mode == "game over" then
 		draw_game_over()
 	elseif game_mode == "pause game" then
@@ -932,7 +998,7 @@ __sfx__
 001000000000000000155503060000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 001000000000000000175503060000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 001000000000000000185503060000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+000400000e35010350113501235014350173501b35020350273502e350353503f3501c30000000343002720017700000000000000000191000000000000222000000000000000000000000000000000000000000
 001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000

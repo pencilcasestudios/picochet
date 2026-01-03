@@ -19,7 +19,7 @@ I am learning to make games using PICO-8. This repo is me following along with a
 14. [x] [Breakout #14 - Angle Control - Pico-8 Hero](https://youtu.be/IAbB7P2gVWc?si=5M4dSMX5yE-_qfTc)
 15. [x] [Breakout #15 - Combo Chains - Pico-8 Hero](https://youtu.be/dXrwwJ4L0y0?si=11gv9A7AgEVGWAvB)
 16. [x] [Breakout #16 - Brick Patterns - Pico-8 Hero](https://youtu.be/bc7cE-NZh0I?si=2sl3dUtve7JBTWL7)
-17. [ ] [Breakout #17 - Levels - Pico-8 Hero]()
+17. [x] [Breakout #17 - Levels - Pico-8 Hero](https://youtu.be/c6sFwambeUQ?si=TcMeNgSM_P0zTxqZ)
 18. [ ] [Breakout #18 - Brick Types - Pico-8 Hero]()
 19. [ ] [Breakout #19 - Brick Gameplay - Pico-8 Hero]()
 20. [ ] [Breakout #20 - Powerup Design - Pico-8 Hero]()
