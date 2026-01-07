@@ -77,6 +77,7 @@ function _init()
 	--- 			"8/" = blank row
 	--- 	"n" = one brick
 	--- 	"." = empty space
+	pixel_gap_from_top = 30
 	brick_patterns = {}
 	brick_patterns[1] = "n"
 	brick_patterns[2] = "nn"
@@ -178,22 +179,10 @@ function build_bricks(pattern)
 	for i = 1, #pattern do
 		local char = sub(pattern, i, i)
 		local val = tonum(char)
-		local pixel_gap_from_top = 30
 
 		if char == "n" then
 			-- add a brick
-			add(
-				brick_x,
-				(j % max_bricks_per_row)
-						* brick_width
-			)
-			add(
-				brick_y,
-				pixel_gap_from_top
-						+ flr(j / max_bricks_per_row)
-						* brick_height
-			)
-			add(is_brick_visible, true)
+			add_brick(j, char)
 			j = j + 1
 		elseif char == "." then
 			-- add an empty space
@@ -210,6 +199,22 @@ function build_bricks(pattern)
 			end
 		end
 	end
+end
+
+function add_brick(_i, _type)
+	add(
+		brick_x,
+		(_i % max_bricks_per_row)
+				* brick_width
+	)
+	add(
+		brick_y,
+		pixel_gap_from_top
+				+ flr(_i / max_bricks_per_row)
+				* brick_height
+	)
+	add(is_brick_visible, true)
+	add(brick_type, _type)
 end
 
 function serve_ball()
