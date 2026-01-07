@@ -63,25 +63,34 @@ function _init()
 	-- stag
 	stage_number = 1
 
-	-- brick patterns
-	-- 	"/" = end of line
-	-- 	number = number of bricks
-	-- 			"8/" = blank row
-	-- 	"x" = one brick
-	-- 	"." = empty space
+	-- types of bricks:
+	--- "n": normal
+	--- "i": indestructable
+	--- "p": powerup
+	--- "m": multi-hit
+	--- "e": exploding
+	--- ".": empty
+
+	-- brick patterns:
+	--- 	"/" = end of line
+	--- 	number = number of bricks
+	--- 			"8/" = blank row
+	--- 	"n" = one brick
+	--- 	"." = empty space
 	brick_patterns = {}
-	brick_patterns[1] = "x"
-	brick_patterns[2] = "xx"
-	brick_patterns[3] = "xxx"
-	brick_patterns[4] = "xxxx"
+	brick_patterns[1] = "n"
+	brick_patterns[2] = "nn"
+	brick_patterns[3] = "nnn"
+	brick_patterns[4] = "nnnn"
+	brick_patterns[6] = ""
 	brick_patterns[5] = "8/"
-			.. "xxxxxxxx/"
-			.. "x.xxxx.x/"
-			.. "xxxxxxxx/"
-			.. "xxx..xxx/"
-			.. "x.xxxx.x/"
-			.. "xx....xx/"
-			.. "xxxxxxxx/"
+			.. "nnnnnnnn/"
+			.. "n.nnnn.n/"
+			.. "nnnnnnnn/"
+			.. "nnn..nnn/"
+			.. "n.nnnn.n/"
+			.. "nn....nn/"
+			.. "nnnnnnnn/"
 			.. "8/"
 end
 
@@ -162,6 +171,7 @@ end
 function build_bricks(pattern)
 	brick_x = {}
 	brick_y = {}
+	brick_type = {}
 	is_brick_visible = {}
 
 	local j = 0
@@ -170,7 +180,7 @@ function build_bricks(pattern)
 		local val = tonum(char)
 		local pixel_gap_from_top = 30
 
-		if char == "x" then
+		if char == "n" then
 			-- add a brick
 			add(
 				brick_x,
