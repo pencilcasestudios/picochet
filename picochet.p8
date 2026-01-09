@@ -83,8 +83,11 @@ function _init()
 	brick_patterns[2] = "nn"
 	brick_patterns[3] = "nnn"
 	brick_patterns[4] = "nnnn"
-	brick_patterns[6] = ""
-	brick_patterns[5] = "8/"
+	brick_patterns[5] = "nnipme.n"
+			.. "nipme.nn"
+			.. "ipme.nnn"
+			.. "pme.nnni"
+	brick_patterns[6] = "8/"
 			.. "nnnnnnnn/"
 			.. "n.nnnn.n/"
 			.. "nnnnnnnn/"
@@ -177,11 +180,29 @@ function build_bricks(pattern)
 
 	local j = 0
 	for i = 1, #pattern do
-		local char = sub(pattern, i, i)
+		local char = sub(
+			pattern, i, i
+		)
 		local val = tonum(char)
 
 		if char == "n" then
-			-- add a brick
+			-- add normal brick
+			add_brick(j, char)
+			j = j + 1
+		elseif char == "i" then
+			-- add indestructable brick
+			add_brick(j, char)
+			j = j + 1
+		elseif char == "p" then
+			-- add powerup brick
+			add_brick(j, char)
+			j = j + 1
+		elseif char == "m" then
+			-- add multi-hit brick
+			add_brick(j, char)
+			j = j + 1
+		elseif char == "e" then
+			-- add exploding brick
 			add_brick(j, char)
 			j = j + 1
 		elseif char == "." then
