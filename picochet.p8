@@ -467,13 +467,50 @@ function draw_play_game()
 	local i
 	for i = 1, #brick_x do
 		if is_brick_visible[i] then
-			rectfill(
-				brick_x[i],
-				brick_y[i],
-				brick_x[i] + brick_width - 1,
-				brick_y[i] + brick_height - 1,
-				sand
-			)
+			if brick_type[i] == "n" then
+				-- normal brick
+				rectfill(
+					brick_x[i],
+					brick_y[i],
+					brick_x[i] + brick_width - 1,
+					brick_y[i] + brick_height - 1,
+					sand
+				)
+			elseif brick_type[i] == "i" then
+				-- indestructable brick
+				rectfill(
+					brick_x[i],
+					brick_y[i],
+					brick_x[i] + brick_width - 1,
+					brick_y[i] + brick_height - 1,
+					dark_gray
+				)
+			elseif brick_type[i] == "p" then
+				-- powerup brick
+				rectfill(
+					brick_x[i],
+					brick_y[i],
+					brick_x[i] + brick_width - 1,
+					brick_y[i] + brick_height - 1,
+					blue
+				)
+			elseif brick_type[i] == "m" then
+				rectfill(
+					brick_x[i],
+					brick_y[i],
+					brick_x[i] + brick_width - 1,
+					brick_y[i] + brick_height - 1,
+					green
+				)
+			elseif brick_type[i] == "e" then
+				rectfill(
+					brick_x[i],
+					brick_y[i],
+					brick_x[i] + brick_width - 1,
+					brick_y[i] + brick_height - 1,
+					orange
+				)
+			end
 		end
 	end
 
