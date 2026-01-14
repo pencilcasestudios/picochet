@@ -99,7 +99,12 @@ function _init()
 end
 
 function shadowed_text(text, x, y, shadow_colour, text_colour)
-	print(text, x + 1, y + 1, shadow_colour)
+	print(
+		text,
+		x + 1,
+		y + 1,
+		shadow_colour
+	)
 	print(text, x, y, text_colour)
 end
 
@@ -160,7 +165,7 @@ function next_stage()
 	-- stage
 	stage_number = stage_number + 1
 
-	if stage_number > #brick_patterns then
+	if (stage_number > #brick_patterns) then
 		sfx(game_win_sound)
 		game_win()
 	else
@@ -208,13 +213,13 @@ function build_bricks(pattern)
 		elseif char == "." then
 			-- add an empty space
 			j = j + 1
-		elseif val != nil and val > 0 then
+		elseif (val != nil and val > 0) then
 			j = j + val
 		elseif char == "/" then
 			-- jump to start of next row
 			-- ONLY if we aren't already
 			-- at the start of one
-			if j % max_bricks_per_row != 0 then
+			if (j % max_bricks_per_row != 0) then
 				j = (flr(j / max_bricks_per_row) + 1)
 						* max_bricks_per_row
 			end
@@ -283,7 +288,7 @@ function sign(n)
 end
 
 function has_ball_collided(bx, by, box_x, box_y, box_width, box_height)
-	-- top of ball bellow paddle
+	-- top of ball below paddle
 	if by - ball_radius
 			> box_y + box_height then
 		return false -- no collision
@@ -426,8 +431,10 @@ function draw_play_game()
 	rectfill(
 		status_bar_x,
 		status_bar_y,
-		status_bar_x + status_bar_width,
-		status_bar_y + status_bar_height,
+		status_bar_x
+				+ status_bar_width,
+		status_bar_y
+				+ status_bar_height,
 		black
 	)
 
@@ -472,42 +479,52 @@ function draw_play_game()
 				rectfill(
 					brick_x[i],
 					brick_y[i],
-					brick_x[i] + brick_width - 1,
-					brick_y[i] + brick_height - 1,
+					brick_x[i]
+							+ brick_width - 1,
+					brick_y[i]
+							+ brick_height - 1,
 					sand
 				)
-			elseif brick_type[i] == "i" then
+			elseif (brick_type[i] == "i") then
 				-- indestructable brick
 				rectfill(
 					brick_x[i],
 					brick_y[i],
-					brick_x[i] + brick_width - 1,
-					brick_y[i] + brick_height - 1,
+					brick_x[i]
+							+ brick_width - 1,
+					brick_y[i]
+							+ brick_height - 1,
 					dark_gray
 				)
-			elseif brick_type[i] == "p" then
+			elseif (brick_type[i] == "p") then
 				-- powerup brick
 				rectfill(
 					brick_x[i],
 					brick_y[i],
-					brick_x[i] + brick_width - 1,
-					brick_y[i] + brick_height - 1,
+					brick_x[i]
+							+ brick_width - 1,
+					brick_y[i]
+							+ brick_height - 1,
 					blue
 				)
-			elseif brick_type[i] == "m" then
+			elseif (brick_type[i] == "m") then
 				rectfill(
 					brick_x[i],
 					brick_y[i],
-					brick_x[i] + brick_width - 1,
-					brick_y[i] + brick_height - 1,
+					brick_x[i]
+							+ brick_width - 1,
+					brick_y[i]
+							+ brick_height - 1,
 					green
 				)
-			elseif brick_type[i] == "e" then
+			elseif (brick_type[i] == "e") then
 				rectfill(
 					brick_x[i],
 					brick_y[i],
-					brick_x[i] + brick_width - 1,
-					brick_y[i] + brick_height - 1,
+					brick_x[i]
+							+ brick_width - 1,
+					brick_y[i]
+							+ brick_height - 1,
 					orange
 				)
 			end
@@ -654,16 +671,17 @@ function update_play_game()
 
 	if is_paddle_sticky then
 		-- the ball moves with the paddle
-		ball_x = paddle_x + flr(paddle_width / 2)
+		ball_x = paddle_x
+				+ flr(paddle_width / 2)
 		ball_y = paddle_y - ball_radius - 1
 	else
 		-- regular ball physics
 		nextx = ball_x + ball_deltax
 		nexty = ball_y + ball_deltay
 
-		-- bounce the ball off the left
-		-- and right walls of the play
-		-- area
+		-- bounce the ball off the
+		-- left and right walls of
+		-- the play area
 		if nextx > screen_right
 				or nextx < screen_left then
 			nextx = mid(
@@ -676,8 +694,8 @@ function update_play_game()
 			score = score + wall_hit_points
 		end
 
-		-- bounce the ball off the top
-		-- of the play area
+		-- bounce the ball off the
+		-- top of the play area
 		if nexty < screen_top then
 			nexty = mid(
 				screen_bottom,
@@ -705,13 +723,13 @@ function update_play_game()
 			) then
 				-- handle collision by
 				-- finding out the
-				-- trajectory of the ball so
-				-- that we can appropriately
-				-- deflect it
+				-- trajectory of the ball
+				-- so that we can
+				-- appropriately deflect it
 
 				-- handle cases when the
-				-- ball hits two bricks at a
-				-- time
+				-- ball hits two bricks at
+				-- a time
 				if not brick_hit then
 					if is_horizontal_deflect(
 						ball_x,
@@ -773,10 +791,14 @@ function update_play_game()
 				-- direction
 				ball_deltax = -ball_deltax
 
-				if ball_x < paddle_x + paddle_width / 2 then
+				if (ball_x
+							< (paddle_x
+								+ (paddle_width / 2))) then
 					nextx = paddle_x - ball_radius
 				else
-					nextx = paddle_x + paddle_width + ball_radius
+					nextx = paddle_x
+							+ paddle_width
+							+ ball_radius
 				end
 			else
 				-- deflect in the y
@@ -784,20 +806,22 @@ function update_play_game()
 				ball_deltay = -ball_deltay
 
 				-- reduce the occurrance of
-				-- the ball getting stuck in
-				-- the paddle
+				-- the ball getting stuck
+				-- in the paddle
 				nexty = paddle_y - ball_radius
 
-				if abs(paddle_deltax) > 2 then
+				if (abs(paddle_deltax) > 2) then
 					-- allow deflection angle
 					-- to change
-					if sign(paddle_deltax) == sign(ball_deltax) then
+					if (sign(paddle_deltax)
+								== sign(ball_deltax)) then
 						-- reduce the ball angle
 						set_ball_angle(mid(
 							0, ball_angle - 1, 2
 						))
 					else
-						-- increase the ball angle
+						-- increase the ball
+						-- angle
 						if ball_angle == 2 then
 							ball_deltax = -ball_deltax
 						else
@@ -823,8 +847,9 @@ function update_play_game()
 		-- set the paddle colour
 		paddle_colour = white
 
-		-- if the ball hits the bottom
-		-- of the screen, the player
+		-- if the ball hits the
+		-- bottom of the screen, the
+		-- player
 		-- loses a life and we serve
 		-- the ball
 		if nexty > screen_bottom then
@@ -884,33 +909,33 @@ function update_pause_game()
 end
 
 function _update60()
-	if game_mode == "start game" then
+	if (game_mode == "start game") then
 		update_start_game()
-	elseif game_mode == "play game" then
+	elseif (game_mode == "play game") then
 		update_play_game()
-	elseif game_mode == "stage clear" then
+	elseif (game_mode == "stage clear") then
 		update_stage_clear()
-	elseif game_mode == "game over" then
+	elseif (game_mode == "game over") then
 		update_game_over()
-	elseif game_mode == "pause game" then
+	elseif (game_mode == "pause game") then
 		update_pause_game()
-	elseif game_mode == "game win" then
+	elseif (game_mode == "game win") then
 		update_game_win()
 	end
 end
 
 function _draw()
-	if game_mode == "start game" then
+	if (game_mode == "start game") then
 		draw_start_game()
-	elseif game_mode == "play game" then
+	elseif (game_mode == "play game") then
 		draw_play_game()
-	elseif game_mode == "stage clear" then
+	elseif (game_mode == "stage clear") then
 		draw_stage_clear()
-	elseif game_mode == "game over" then
+	elseif (game_mode == "game over") then
 		draw_game_over()
-	elseif game_mode == "pause game" then
+	elseif (game_mode == "pause game") then
 		draw_pause_game()
-	elseif game_mode == "game win" then
+	elseif (game_mode == "game win") then
 		draw_game_win()
 	end
 end
