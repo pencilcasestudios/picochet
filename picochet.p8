@@ -751,7 +751,7 @@ function update_play_game()
 						ball_deltay = -ball_deltay
 					end
 					brick_hit = true
-					react_to_hit_brick(i)
+					react_to_brick_hit(i)
 				end
 			end
 		end
@@ -862,7 +862,7 @@ function update_play_game()
 	end
 end
 
-function react_to_hit_brick(_i)
+function react_to_brick_hit(_i)
 	if (brick_type[_i] == "n") then
 		-- normal brick
 		is_brick_visible[_i] = false
