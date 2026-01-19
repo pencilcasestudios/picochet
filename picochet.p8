@@ -49,7 +49,7 @@ function _init()
 	brick_impact_sound = 4
 	brick_indestructible_impact_sound = 17
 	brick_multi_hit_impact_sound = 18
-	brick_exploding_impact_sound = 19
+	brick_explodable_impact_sound = 19
 	brick_powerup_impact_sound = 20
 	game_win_sound = 5
 	game_over_sound = 6
@@ -73,7 +73,9 @@ function _init()
 	--- "i": indestructible
 	--- "p": powerup
 	--- "m": multi-hit
-	--- "e": exploding
+	--- "e": explodable
+	--- "x": exploding later
+	--- "y": exploding now
 	--- ".": empty
 
 	-- brick patterns:
@@ -83,7 +85,7 @@ function _init()
 	--- 	"n" = one brick
 	--- 	"." = empty space
 	brick_patterns = {}
-	brick_patterns[1] = "mpeeeeem"
+	brick_patterns[1] = "eeeeeeem"
 	brick_patterns[2] = "im"
 	brick_patterns[3] = "iim"
 	brick_patterns[4] = "iiim"
@@ -211,7 +213,7 @@ function build_bricks(pattern)
 			add_brick(j, char)
 			j = j + 1
 		elseif char == "e" then
-			-- add exploding brick
+			-- add explodable brick
 			add_brick(j, char)
 			j = j + 1
 		elseif char == "." then
@@ -531,6 +533,16 @@ function draw_play_game()
 							+ brick_height - 1,
 					orange
 				)
+			elseif (brick_type[i] == "x") then
+				rectfill(
+					brick_x[i],
+					brick_y[i],
+					brick_x[i]
+							+ brick_width - 1,
+					brick_y[i]
+							+ brick_height - 1,
+					red
+				)
 			end
 		end
 	end
@@ -838,8 +850,7 @@ function update_play_game()
 		ball_x = nextx
 		ball_y = nexty
 
-		-- set the paddle colour
-		paddle_colour = white
+		check_exploding_bricks()
 
 		-- if the ball hits the
 		-- bottom of the screen, the
@@ -909,9 +920,10 @@ function react_to_brick_hit(_i)
 		sfx(sound_index + combo_hit)
 		combo_hit = combo_hit + 1
 	elseif (brick_type[_i] == "e") then
-		-- exploding brick
-		sfx(brick_exploding_impact_sound)
-		is_brick_visible[_i] = false
+		-- explodable brick
+		brick_type[_i] = "x" -- explode later
+		sfx(brick_explodable_impact_sound)
+		-- is_brick_visible[_i] = false
 		score = score
 				+ (brick_hit_points
 					* combo_hit)
@@ -919,6 +931,44 @@ function react_to_brick_hit(_i)
 		sfx(sound_index + combo_hit)
 		combo_hit = (combo_hit + 1)
 				% max_combos
+	end
+end
+
+function check_exploding_bricks()
+	for i = 1, #brick_type do
+		if brick_type[i] == "x" then
+			-- if exploding later,
+			-- update to exploding now
+			brick_type[i] = "y"
+		end
+	end
+
+	for i = 1, #brick_type do
+		if brick_type[i] == "y" then
+			-- if exploding now then
+			-- explode
+			explode_brick(i)
+		end
+	end
+
+	for i = 1, #brick_type do
+		if brick_type[i] == "x" then
+			-- if exploding later,
+			-- update to exploding now
+			brick_type[i] = "y"
+		end
+	end
+end
+
+function explode_brick(_exploding)
+	is_brick_visible[_exploding] = false
+	for i = 1, #brick_type do
+		if i != _exploding
+				and is_brick_visible[i]
+				and abs(brick_x[i] - brick_x[_exploding]) <= brick_width
+				and abs(brick_y[i] - brick_y[_exploding]) <= brick_height then
+			react_to_brick_hit(i)
+		end
 	end
 end
 
@@ -1150,7 +1200,7 @@ __sfx__
 001000000000000000185503060000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 000400000e35010350113501235014350173501b35020350273502e350353503f3501c30000000343002720017700000000000000000191000000000000222000000000000000000000000000000000000000000
 00040000355501f500002000020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-00040000265501f500002000020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-001800002b65007650076002500021100193001c200154000f5000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00040000265401f500002000020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+001800002b63007620076002500021100193001c200154000f5000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0007000033010385003603039500380500660006000000000d0000d0000d0003b1000d000066000d0000d0000d0000d0000d000395000b000066000900008000080003b500080003a30007000066000000000000
 0010002006050385000605039500060500665006050000000d0500d0000d0503b1000d050066500d0500d0000d0500d0000d050395000b050066500905008000080503b500080503a35007050066500005000000
