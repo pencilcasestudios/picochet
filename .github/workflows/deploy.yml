@@ -2,6 +2,8 @@ name: Deploy to itch.io
 
 on:
   push:
+    branches:
+      - main
     paths:
       - 'build/**'
   workflow_dispatch:
