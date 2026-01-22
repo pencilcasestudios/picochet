@@ -27,11 +27,11 @@ jobs:
           fi
 
       - name: Deploy to itch.io
-        uses: manleyjster/butler-publish-itchio-action@master
-        env:
-          BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
-          CHANNEL: html5
-          ITCH_GAME: picochet
-          ITCH_USER: pencilcasestudios
-          PACKAGE: build/
-          VERSION_FILE: build/version.txt
+        uses: Ayowel/butler-publish-itchio-action@v2.0.0
+        with:
+          butler_key: ${{ secrets.BUTLER_CREDENTIALS }}
+          itch_user: pencilcasestudios
+          itch_game: picochet
+          package: build/
+          channel: html5
+          version_file: build/version.txt
