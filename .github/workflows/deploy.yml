@@ -27,7 +27,7 @@ jobs:
           fi
 
       - name: Deploy to itch.io
-        uses: Ayowel/butler-publish-itchio-action@v2.0.0
+        uses: yeslayla/butler-publish-itchio-action@v1.1.0
         with:
           butler_key: ${{ secrets.BUTLER_CREDENTIALS }}
           itch_user: pencilcasestudios
