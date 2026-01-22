@@ -17,7 +17,7 @@ function _init()
 	debug = ""
 
 	-- game
-	game_version = "0.0.7"
+	game_version = "0.0.8"
 	game_developer = "pencil case studios"
 	game_mode = "start game"
 
