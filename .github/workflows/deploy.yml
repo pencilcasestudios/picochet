@@ -1,0 +1,42 @@
+name: Deploy to itch.io
+
+on:
+  push:
+    paths:
+      - 'build/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy Build to itch.io
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Verify Build Artifacts
+        run: |
+          if [ ! -f "build/index.html" ]; then
+            echo "Error: build/index.html not found!"
+            exit 1
+          fi
+          if [ ! -f "build/picochet.js" ]; then
+            echo "Error: build/picochet.js not found!"
+            exit 1
+          fi
+
+      - name: Install Butler
+        run: |
+          curl -L -o butler.zip https://broth.itch.ovh/butler/linux-amd64/LATEST/archive/default
+          unzip butler.zip
+          chmod +x butler
+          ./butler -V
+
+      - name: Deploy to itch.io
+        env:
+          BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
+        run: |
+          # The format is butler push <directory> <user>/<game>:<channel>
+          # 'html5' is the standard channel for web games on itch.io
+          ./butler push build/ pencilcasestudios/picochet:html5 --userversion-file build/version.txt

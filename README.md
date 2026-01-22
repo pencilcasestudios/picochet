@@ -81,16 +81,32 @@ I am learning to make games using PICO-8. This repo is me following along with a
 75. [ ] [Breakout #75 - Ship It! - Pico-8 Hero]()
 76. [x] [How to upload Pico-8 games to itch.io](https://youtu.be/cXaqrK7yl9U?si=XomZIcybW8_VOCQQ)
 
-## Publishing Picochet to itch.io
+## Automated Deployment to itch.io
 
-You can play Picochet on itch.io by visiting: https://pencilcasestudios.itch.io/picochet
+This project uses an automated deployment workflow to push builds to itch.io.
 
-Here are the steps to upload Picochet to itch.io (See [How to upload Pico-8 games to itch.io](https://youtu.be/cXaqrK7yl9U?si=XomZIcybW8_VOCQQ) for a detailed tutorial):
+### First-Time Setup
+1.  **itch.io API Key**:
+    - Go to your itch.io settings -> [API Keys](https://itch.io/user/settings/api-keys).
+    - Generate a new API key.
+2.  **GitHub Secret**:
+    - In your GitHub repository, go to **Settings** -> **Secrets and variables** -> **Actions**.
+    - Add a new repository secret named `BUTLER_CREDENTIALS` and paste your itch.io API key as the value.
 
-- Open PICO-8
-- Capture a label image (if one doesn't already exist) by pressing `F7` during gameplay and then saving the cart.
-- Capture updated gameplay stills and videos by pressing `F6` and `F9` respectively during gameplay
-- Export HTML: `export picochet.html` from the PICO-8 command line
-- Rename `pichochet.html` to `index.html` from the development environment
-- Create `picochet.zip` from `index.html` and `picochet.js`
-- Upload `piochet.zip` to itch.io
+### Deployment Workflow
+1.  **Export from PICO-8**:
+    - Open PICO-8 and load your cart.
+    - Run: `export picochet.html`
+2.  **Run the Helper Script**:
+    - In your terminal, run: `./export-and-prepare.sh`
+    - This script will:
+        - Increment the patch version in `picochet.p8`.
+        - Prepare the `build/` directory.
+        - Stage changes and ask for confirmation.
+        - Create a Git tag and push to GitHub.
+3.  **GitHub Action**:
+    - Once pushed, a GitHub Action will automatically trigger to deploy the `build/` folder to itch.io using the Butler CLI.
+
+### Monitoring
+- You can watch the deployment progress under the **Actions** tab of your GitHub repository.
+- Each deployment is tagged in Git (e.g., `v0.0.8`).
