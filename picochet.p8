@@ -17,7 +17,7 @@ function _init()
 	debug = ""
 
 	-- game
-	game_version = "0.0.6"
+	game_version = "0.0.7"
 	game_developer = "pencil case studios"
 	game_mode = "start game"
 
@@ -85,23 +85,9 @@ function _init()
 	--- 	"n" = one brick
 	--- 	"." = empty space
 	brick_patterns = {}
-	brick_patterns[1] = "eeeeeeem"
-	brick_patterns[2] = "im"
-	brick_patterns[3] = "iim"
-	brick_patterns[4] = "iiim"
-	brick_patterns[5] = "mmipme.m"
-			.. "mipme.mm"
-			.. "ipme.nnn"
-			.. "pme.mmmi"
-	brick_patterns[6] = "8/"
-			.. "nnnnnnnn/"
-			.. "n.nnnn.n/"
-			.. "nnnnnnnn/"
-			.. "nnn..nnn/"
-			.. "n.nnnn.n/"
-			.. "nn....nn/"
-			.. "nnnnnnnn/"
-			.. "8/"
+	brick_patterns[1] = ".nnnnnn."
+	brick_patterns[2] = ".mmmmmm."
+	brick_patterns[3] = ".imnnmi."
 end
 
 function shadowed_text(text, x, y, shadow_colour, text_colour)
