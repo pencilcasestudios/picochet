@@ -26,17 +26,12 @@ jobs:
             exit 1
           fi
 
-      - name: Install Butler
-        run: |
-          curl -L -o butler.zip https://broth.itch.ovh/butler/linux-amd64/LATEST/archive/default
-          unzip butler.zip
-          chmod +x butler
-          ./butler -V
-
       - name: Deploy to itch.io
+        uses: manleyjster/butler-publish-itchio-action@master
         env:
           BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
-        run: |
-          # The format is butler push <directory> <user>/<game>:<channel>
-          # 'html5' is the standard channel for web games on itch.io
-          ./butler push build/ pencilcasestudios/picochet:html5 --userversion-file build/version.txt
+          CHANNEL: html5
+          ITCH_GAME: picochet
+          ITCH_USER: pencilcasestudios
+          PACKAGE: build/
+          VERSION_FILE: build/version.txt
