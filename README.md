@@ -1,5 +1,6 @@
 # Picochet
 
+## Learning PICO-8
 I am learning to make games using PICO-8. This repo is me following along with and being inspired by the [PICO-8 Tutorial - Breakout](https://www.youtube.com/playlist?list=PLea8cjCua_P0qjjiG8G5FBgqwpqMU7rBk) on YouTube by [Lazy Devs](https://www.youtube.com/@LazyDevs) (or [TeamworkCast](https://www.youtube.com/@TeamworkCast)).
 
 00. [x] [Let's Make Breakout in PICO-8](https://youtu.be/YQzwVDMIfyU?si=IYcgMlGWlYwGDTBS)
@@ -79,3 +80,17 @@ I am learning to make games using PICO-8. This repo is me following along with a
 74. [ ] [Breakout #74 - Clip - Pico-8 Hero]()
 75. [ ] [Breakout #75 - Ship It! - Pico-8 Hero]()
 76. [x] [How to upload Pico-8 games to itch.io](https://youtu.be/cXaqrK7yl9U?si=XomZIcybW8_VOCQQ)
+
+## Publishing Picochet to itch.io
+
+You can play Picochet on itch.io by visiting: https://pencilcasestudios.itch.io/picochet
+
+Here are the steps to upload Picochet to itch.io (See [How to upload Pico-8 games to itch.io](https://youtu.be/cXaqrK7yl9U?si=XomZIcybW8_VOCQQ) for a detailed tutorial):
+
+- Open PICO-8
+- Capture a label image (if one doesn't already exist) by pressing `F7` during gameplay and then saving the cart.
+- Capture updated gameplay stills and videos by pressing `F6` and `F9` respectively during gameplay
+- Export HTML: `export picochet.html` from the PICO-8 command line
+- Rename `pichochet.html` to `index.html` from the development environment
+- Create `picochet.zip` from `index.html` and `picochet.js`
+- Upload `piochet.zip` to itch.io
