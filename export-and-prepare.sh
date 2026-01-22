@@ -58,7 +58,8 @@ echo "   - version.txt ($NEW_VERSION)"
 
 # 6. Git Operations
 echo "\n--- Git Stage ---"
-git add "$P8_FILE" "$BUILD_DIR/"
+git add "$P8_FILE"
+git add -f "$BUILD_DIR/"
 
 echo "\nSummary of changes to be committed:"
 git status -s
